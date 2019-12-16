@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14903" systemVersion="18G87" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="InvitationDB" representedClassName="InvitationDB" syncable="YES">
+        <attribute name="lastEditTime" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="name" attributeType="String"/>
+        <attribute name="phoneNumber" attributeType="String"/>
+        <relationship name="task" maxCount="1" deletionRule="Nullify" destinationEntity="TaskDB" inverseName="invitations" inverseEntity="TaskDB"/>
+    </entity>
+    <entity name="LocationDB" representedClassName="LocationDB" syncable="YES">
+        <attribute name="detail" optional="YES" attributeType="String"/>
+        <attribute name="latitude" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="longitude" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="title" attributeType="String"/>
+        <relationship name="task" maxCount="1" deletionRule="Nullify" destinationEntity="TaskDB" inverseName="location" inverseEntity="TaskDB"/>
+    </entity>
+    <entity name="NotificationDB" representedClassName="NotificationDB" syncable="YES">
+        <attribute name="body" optional="YES" attributeType="String"/>
+        <attribute name="datetime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="number" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="rangeRawValue" optional="YES" attributeType="String"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <relationship name="task" maxCount="1" deletionRule="Nullify" destinationEntity="TaskDB" inverseName="notifications" inverseEntity="TaskDB"/>
+    </entity>
+    <entity name="TaskDB" representedClassName="TaskDB" syncable="YES">
+        <attribute name="colorPoint" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="endDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="endTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="ifAllDay" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="note" optional="YES" attributeType="String"/>
+        <attribute name="startDate" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="startTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="timeLengthInDays" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="title" attributeType="String" defaultValueString="(无主题)"/>
+        <attribute name="typeRawValue" attributeType="String"/>
+        <relationship name="invitations" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="InvitationDB" inverseName="task" inverseEntity="InvitationDB"/>
+        <relationship name="location" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="LocationDB" inverseName="task" inverseEntity="LocationDB"/>
+        <relationship name="notifications" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="NotificationDB" inverseName="task" inverseEntity="NotificationDB"/>
+    </entity>
+    <elements>
+        <element name="TaskDB" positionX="-63" positionY="-18" width="128" height="238"/>
+        <element name="InvitationDB" positionX="-54" positionY="-9" width="128" height="103"/>
+        <element name="NotificationDB" positionX="-36" positionY="9" width="128" height="148"/>
+        <element name="LocationDB" positionX="-18" positionY="27" width="128" height="118"/>
+    </elements>
+</model>
