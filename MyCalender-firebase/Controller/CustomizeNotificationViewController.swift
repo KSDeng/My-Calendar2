@@ -6,9 +6,6 @@
 //  Copyright © 2019 dks. All rights reserved.
 //
 
-// References:
-// 1. https://www.journaldev.com/22743/custom-ios-uipickerview
-// 2. https://stackoverflow.com/questions/27642164/how-to-use-two-uipickerviews-in-one-view-controller
 
 import UIKit
 

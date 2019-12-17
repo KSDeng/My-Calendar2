@@ -5,14 +5,6 @@ import MapKit
 import CoreLocation
 
 
-// References:
-// https://medium.com/@pravinbendre772/search-for-places-and-display-results-using-mapkit-a987bd6504df
-// https://www.youtube.com/watch?v=GYzNsVFyDrU          // search for places in map kit
-
-
-// MARK: TODOs
-// 使用当前位置时产生比较友好的信息
-// 搜索并选择位置之后搜索栏文字清空
 
 protocol SetLocationHandle {
     func setLocation(location: MKPlacemark)

@@ -1,8 +1,4 @@
 
-// https://stackoverflow.com/questions/28894765/uibutton-action-in-table-view-cell
-
-
-
 import UIKit
 
 protocol DeleteInvitationDelegate {

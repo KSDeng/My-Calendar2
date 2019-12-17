@@ -1,13 +1,3 @@
-//
-//  InvitationViewController.swift
-//  MyCalendar
-//
-//  Created by DKS_mac on 2019/12/5.
-//  Copyright © 2019 dks. All rights reserved.
-//
-
-// https://stackoverflow.com/questions/20523874/uitableviewcontroller-inside-a-uiviewcontroller
-// https://stackoverflow.com/questions/34348275/pass-data-between-viewcontroller-and-containerviewcontroller
 
 
 import UIKit

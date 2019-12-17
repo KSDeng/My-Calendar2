@@ -6,11 +6,23 @@
 //  Copyright © 2019 dks. All rights reserved.
 //
 
-// MARK: - Bugs
-// 1. 若一个事件设置为无通知，点击编辑之后通知设置又会变为"提前30分钟通知"，比较好的方式应该是维持原来的通知设置
-
-// MARK: TODOs
-// 1. 为每个联系人设置一张图像(称呼的最后一个字、圆形)
+// References:
+// 1. https://github.com/CoderMJLee/MJRefresh
+// 2. https://learnappmaking.com/urlsession-swift-networking-how-to/
+// 3. http://timor.tech/api/holiday     // 节假日API文档
+// 4. https://stackoverflow.com/questions/31018447/how-to-programmatically-have-uitableview-scroll-to-a-specific-section
+// 5. https://digitalleaves.com/segues-navigation-ios-basics/
+// 6. https://medium.com/@stasost/ios-how-to-build-a-table-view-with-multiple-cell-types-2df91a206429
+// 7. https://www.journaldev.com/15077/ios-uitableview-multiple-cell-types
+// 8. https://www.journaldev.com/22743/custom-ios-uipickerview
+// 9. https://stackoverflow.com/questions/27642164/how-to-use-two-uipickerviews-in-one-view-controller
+// 10. https://stackoverflow.com/questions/28894765/uibutton-action-in-table-view-cell
+// 11. https://stackoverflow.com/questions/20523874/uitableviewcontroller-inside-a-uiviewcontroller
+// 12. https://stackoverflow.com/questions/34348275/pass-data-between-viewcontroller-and-containerviewcontroller
+// 13. https://medium.com/@pravinbendre772/search-for-places-and-display-results-using-mapkit-a987bd6504df
+// 14. https://www.youtube.com/watch?v=GYzNsVFyDrU          // search for places in map kit
+// 15. https://dev.to/lawgimenez/implementing-the-expandable-cell-in-ios-uitableview-f7j
+// 16. https://stackoverflow.com/questions/17018447/rounding-of-nsdate-to-nearest-hour-in-ios
 
 import UIKit
 import Foundation
