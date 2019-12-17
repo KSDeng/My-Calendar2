@@ -6,6 +6,7 @@
 //  Copyright © 2019 dks. All rights reserved.
 //
 
+
 // References:
 // 1. https://github.com/CoderMJLee/MJRefresh
 // 2. https://learnappmaking.com/urlsession-swift-networking-how-to/
@@ -75,6 +76,8 @@ class CalendarTableViewController: UITableViewController {
     // 第一次加载
     var ifFirstTime = true
     
+    let today = Event(startDate: Date(), type: .Today, ifAllDay: true, timeLengthInDays: 1, title: "今天")
+    
     // MARK: - View lifecycle
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -131,7 +134,7 @@ class CalendarTableViewController: UITableViewController {
         }
         if ifFirstTime {
             // 设置今天
-            let today = Event(startDate: Date(), type: .Today, ifAllDay: true, timeLengthInDays: 1, title: "今天")
+            // let today = Event(startDate: Date(), type: .Today, ifAllDay: true, timeLengthInDays: 1, title: "今天")
             specialDays.append(today)
             let index = today.startDate.firstDayOfWeek().getAsFormat(format: dateIndexFormat)
             if !heights.keys.contains(index){
@@ -685,27 +688,43 @@ class CalendarTableViewController: UITableViewController {
         }
         
         // 删除对应的EventView
-        let cellIndex = task.startDate.firstDayOfWeek().getAsFormat(format: dateIndexFormat)
-        guard eventViews.keys.contains(cellIndex) else {
-            fatalError("Target view does not exist!")
-        }
-        
-        
-        var arrayIndex = eventViews[cellIndex]!.firstIndex(where: {ev in
-            if let evTask = ev.task { return evTask == task }
-            else { return false }
-        })
-        
-        guard arrayIndex != nil else {
-            fatalError("Target view does not exist!")
-        }
-        while arrayIndex != nil {
-            print("Delete view at cell \(cellIndex) of index \(arrayIndex!)")
-            eventViews[cellIndex]!.remove(at: arrayIndex!)
-            arrayIndex = eventViews[cellIndex]!.firstIndex(where: {ev in
+        if task.timeLengthInDays == 0 {
+            let cellIndex = task.startDate.firstDayOfWeek().getAsFormat(format: dateIndexFormat)
+            guard eventViews.keys.contains(cellIndex) else {
+                fatalError("Target view does not exist!")
+            }
+            let arrayIndex = eventViews[cellIndex]!.firstIndex(where: {ev in
                 if let evTask = ev.task { return evTask == task }
                 else { return false }
             })
+            guard arrayIndex != nil else {
+                fatalError("Target view does not exist!")
+            }
+            
+            print("Delete view at cell \(cellIndex) of index \(arrayIndex!)")
+            eventViews[cellIndex]!.remove(at: arrayIndex!)
+            
+            
+        } else {
+            for i in 0...Int(task.timeLengthInDays) {
+                let date = Date(timeInterval: Double(i*24*60*60), since: task.startDate)
+                // print("Date: \(date.getAsFormat(format: dateIndexFormat))")
+                let cellIndex = date.firstDayOfWeek().getAsFormat(format: dateIndexFormat)
+                guard eventViews.keys.contains(cellIndex) else {
+                    fatalError("Target view does not exist!")
+                }
+                let arrayIndex = eventViews[cellIndex]!.firstIndex(where: {ev in
+                    if let evTask = ev.task { return evTask == task }
+                    else { return false }
+                })
+                guard arrayIndex != nil else {
+                    fatalError("Target view does not exist!")
+                }
+                
+                print("Delete view at cell \(cellIndex) of index \(arrayIndex!)")
+                eventViews[cellIndex]!.remove(at: arrayIndex!)
+                
+            }
         }
         
     }
@@ -734,6 +753,18 @@ class CalendarTableViewController: UITableViewController {
         }
     }
     
+    private func findToday() -> IndexPath {
+        let index = today.startDate.firstDayOfWeek().getAsFormat(format: dateIndexFormat)
+        let todayIndex = tableData.firstIndex(where: {cellData in
+            return cellData.id == index
+        })
+        guard todayIndex != nil else {
+            fatalError("Today index not found!")
+        }
+        return IndexPath(row: todayIndex!, section: 0)
+        
+    }
+    
     
     // MARK: - Navigation
 
@@ -752,8 +783,14 @@ class CalendarTableViewController: UITableViewController {
     // MARK: - Actions
     @IBAction func backToToday(_ sender: UIBarButtonItem) {
         // print("Start index: \(startIndex)")
-        tableView.scrollToRow(at: IndexPath(row: -startIndex + 3, section: 0), at: .middle, animated: true)
+        
+        // BUG: scroll to wrong offset
+        // tableView.scrollToRow(at: IndexPath(row: -startIndex + 3, section: 0), at: .middle, animated: true)
+        
+        // Solution: find the true path of today rather than directly by an index variable
+        tableView.scrollToRow(at: findToday(), at: .middle, animated: true)
     }
+    
     
     // 滑动tableView事件
     // https://stackoverflow.com/questions/32268856/how-to-know-that-tableview-started-scrolling

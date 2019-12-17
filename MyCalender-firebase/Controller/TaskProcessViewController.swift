@@ -586,13 +586,15 @@ class TaskProcessViewController: UITableViewController {
             endDateLabel.isUserInteractionEnabled = false
             
             tmpStartTime = "\(Date().getAsFormat(format: "yyyyMMdd"))0000".toDate(format: "yyyyMMddHHmm")
-            tmpEndDate = Date()
-            tmpEndTime = "\(Date().getAsFormat(format: "yyyyMMdd"))2359".toDate(format: "yyyyMMddHHmm")
             
         } else {
             startTimeButton.isHidden = false
             endTimeButton.isHidden = false
             endDateLabel.isUserInteractionEnabled = true
+            
+            endDateTimePicker.date = getTimeCombined(date: tmpEndDate, time: tmpEndTime)
+            cachedST = getTimeCombined(date: tmpStartDate, time: tmpStartTime)
+            cachedET = getTimeCombined(date: tmpEndDate, time: tmpEndTime)
         }
         tableView.beginUpdates()
         tableView.endUpdates()
