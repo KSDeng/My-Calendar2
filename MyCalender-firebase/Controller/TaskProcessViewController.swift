@@ -126,14 +126,15 @@ class TaskProcessViewController: UITableViewController {
     var tmpNotificationRange: CustomizedNotificationRange?
     var tmpNotificationNumber: Int?
     // 状态
-    var notificationSettingStatus = NotificationSetting.HalfAnHour
+    var notificationSettingStatus = NotificationSetting.None
     // 自定义notification通知时间秒数记录
     var customNotificationSecondsFromNow: Int?
     
+    // 缓存邀请对象
+    var tmpInvitations: [Invitation] = []
+    
     // 处理任务的代理
     var delegate: TaskProcessDelegate?
-    
-    
     
     
     // MARK: - View lifecycle
@@ -167,7 +168,9 @@ class TaskProcessViewController: UITableViewController {
         
         switch status {
         case .HeadToAdd:
-            setupAdd()
+            setupHeadToAdd()
+        case .BackToAdd:
+            setupBackToAdd()
         case .Show:
             setupShow()
         case .Edit:
@@ -202,7 +205,7 @@ class TaskProcessViewController: UITableViewController {
         self.noteTextField.inputAccessoryView = toolBar
     }
     
-    private func setupAdd() {
+    private func setupHeadToAdd() {
         let defaultStart = Date().nearestHour()
         let defaultEnd = Date.init(timeInterval: 60*60, since: Date()).nearestHour()
         
@@ -222,6 +225,29 @@ class TaskProcessViewController: UITableViewController {
         startTimeButton.setTitle(defaultStart.getAsFormat(format: "HH:mm"), for: .normal)
         endDateLabel.text = "\(defaultEnd.getAsFormat(format: "yyyy年M月d日")) \(defaultEndWeekday)"
         endTimeButton.setTitle(defaultEnd.getAsFormat(format: "HH:mm"), for: .normal)
+    }
+    
+    private func setupBackToAdd() {
+        // print("setupBackToAdd")
+        
+        if tmpInvitations.count > 0 {
+            
+            if tmpInvitations.count == 1 {
+                invitationLabel.text = "\(tmpInvitations[0].name)"
+            } else {
+                invitationLabel.text = "\(tmpInvitations[0].name)等\(tmpInvitations.count)位"
+            }
+            invitationLabel.textColor = UIColor.black
+        } else {
+            if status == .Show {
+                invitationLabel.text = "未添加邀请对象"
+                invitationLabel.textColor = UIColor.black
+            } else if status == .BackToAdd || status == .HeadToAdd {
+                invitationLabel.text = "添加邀请对象"
+                invitationLabel.textColor = UIColor.lightGray
+            }
+        }
+        
     }
     
     private func setupShow() {
@@ -256,6 +282,7 @@ class TaskProcessViewController: UITableViewController {
             locationLabel.textColor = UIColor.black
         } else {
             locationLabel.text = "未添加地点"
+            locationLabel.textColor = UIColor.black
         }
         
         // 全天开关
@@ -276,10 +303,42 @@ class TaskProcessViewController: UITableViewController {
             notificationCurrentSettingLabel.text = "提前\(noti.number)\(range!)通知"
         } else {
             notificationCurrentSettingLabel.text = "未设置通知"
+            notificationSettingStatus = .None
         }
         
+        
         // 备注
-        noteTextField.text = task.note
+        if let note = task.note {
+            noteTextField.text = note
+            noteTextField.textColor = UIColor.black
+        } else {
+            noteTextField.text = "未添加备注"
+        }
+        
+        // 邀请
+        // https://stackoverflow.com/questions/36954095/iterate-nsset-and-cast-to-type-in-one-step
+        // 将持久化的邀请还原
+        for case let inv as InvitationDB in task.invitations! {
+            let invitation = Invitation(name: inv.name, lastEditTime: inv.lastEditTime)
+            if let contact = inv.contact {
+                invitation.contact = contact
+            }
+            tmpInvitations.append(invitation)
+            tmpInvitations.sort(by: {$0.lastEditTime < $1.lastEditTime})
+        }
+        
+        if tmpInvitations.count > 0 {
+            
+            if tmpInvitations.count == 1 {
+                invitationLabel.text = "\(tmpInvitations[0].name)"
+            } else {
+                invitationLabel.text = "\(tmpInvitations[0].name)等\(tmpInvitations.count)位"
+            }
+            invitationLabel.textColor = UIColor.black
+        } else {
+            invitationLabel.text = "未添加邀请对象"
+            invitationLabel.textColor = UIColor.black
+        }
         
         // navigationItem 某一侧添加多个BarButtonItem
         // https://stackoverflow.com/questions/30341263/how-to-add-multiple-uibarbuttonitems-on-right-side-of-navigation-bar
@@ -608,16 +667,7 @@ class TaskProcessViewController: UITableViewController {
         task.startTime = tmpStartTime
         task.endDate = tmpEndDate
         task.endTime = tmpEndTime
-        /*
-        if !task.ifAllDay {
-            guard let stTime = tmpStartTime, let edDate = tmpEndDate, let edTime = tmpEndTime else {
-                fatalError("Time setting incomplete!")
-            }
-            task.startTime = stTime
-            task.endDate = edDate
-            task.endTime = edTime
-        }
-        */
+
         
         // 地点
         if let loc = tmpLocation {
@@ -638,6 +688,20 @@ class TaskProcessViewController: UITableViewController {
             task.notification = notificationDB
         }
         
+        // 邀请
+        for inv in tmpInvitations {
+            // 创建并持久化
+            let invDB = InvitationDB(name: inv.name, lastEditTime: inv.lastEditTime, insertInto: Utils.context)
+            if let contact = inv.contact {
+                invDB.contact = contact
+            }
+            invDB.task = task
+            task.invitations = task.invitations?.adding(invDB) as NSSet?
+        }
+        
+        // 备注
+        task.note = noteTextField.text
+        
         delegate?.addTask(task: task)
         
         navigationController?.popViewController(animated: true)
@@ -647,7 +711,7 @@ class TaskProcessViewController: UITableViewController {
     @IBAction func notificationNoneButtonClicked(_ sender: UIButton) {
         notificationSettingStatus = .None
         ifShowCustomNotificationSettings = false
-        notificationCurrentSettingLabel.text = "无"
+        notificationCurrentSettingLabel.text = "不通知"
         tableView.beginUpdates()
         tableView.endUpdates()
     }
@@ -738,13 +802,6 @@ class TaskProcessViewController: UITableViewController {
             fatalError("Edit task nil!")
         }
         
-        //let newDateIndex = tmpStartDate!.getAsFormat(format: dateIndexFormat)
-        //let ifDateChanged = task.startDate.getAsFormat(format: dateIndexFormat) != newDateIndex
-        //let nDays = ifAllDaySwitch.isOn ? 0 : numOfDaysBetween(start: tmpStartDate!, end: tmpEndDate!)
-        //let ifNumDaysChanged = Int(task.timeLengthInDays) != nDays
-        
-        //if ifDateChanged || ifNumDaysChanged {
-            // 起始日期改变或者天数改变
             
             // 主题
             let title = titleTextField.text!.isEmpty ? "(无主题)" : titleTextField.text!
@@ -758,6 +815,9 @@ class TaskProcessViewController: UITableViewController {
             let newTask = TaskDB(startDate: stDate, ifAllDay: ifAllDaySwitch.isOn, timeLengthInDays: lengthInDays, title: title, colorPoint: Int(Utils.currentColorPoint), insertInto: Utils.context)
             newTask.colorPoint = task.colorPoint
             
+            if task.notification != nil {
+                notificationManager.deleteNotification(id: task.notification!.id)
+            }
             delegate?.deleteTask(task: task)
             
             newTask.startTime = tmpStartTime
@@ -783,47 +843,25 @@ class TaskProcessViewController: UITableViewController {
                 newTask.notification = notificationDB
             }
             
+            // 邀请
+            for inv in tmpInvitations {
+                // 创建并持久化
+                let invDB = InvitationDB(name: inv.name, lastEditTime: inv.lastEditTime, insertInto: Utils.context)
+                if let contact = inv.contact {
+                    invDB.contact = contact
+                }
+                invDB.task = newTask
+                newTask.invitations = task.invitations?.adding(invDB) as NSSet?
+            }
+        
+            // 备注
+            newTask.note = noteTextField.text
+            
             delegate?.addTask(task: newTask)
             
             navigationController?.popViewController(animated: true)
             
-        //}
-        /*
-        else{
-            // 起始日期和天数均未变
-            task.title = titleTextField.text ?? "(无主题)"
-            task.ifAllDay = ifAllDaySwitch.isOn
-            task.startDate = tmpStartDate!
-            task.startTime = tmpStartTime
-            task.endDate = tmpEndDate
-            task.endTime = tmpEndTime
-            
-            // 设置位置信息
-            if let loc = tmpLocation {
-                if task.location == nil {
-                    // 新增地点
-                    let location = LocationDB(title: loc.name!, latitude: loc.coordinate.latitude, longitude: loc.coordinate.longitude, insertInto: Utils.context)
-                    location.detail = loc.title
-                    location.task = task
-                    task.location = location
-                    
-                }else {
-                    // 修改地点
-                    task.location!.title = loc.name!
-                    task.location!.latitude = loc.coordinate.latitude
-                    task.location!.longitude = loc.coordinate.longitude
-                    task.location!.detail = loc.title
-                }
-            }
-            
-            // 备注
-            task.note = noteTextField.text ?? "(未添加备注)"
-            
-            delegate?.editTask(task: task)
-            
-            navigationController?.popViewController(animated: true)
-            
-        }*/
+
     }
     
     // MARK: - Private utils
@@ -955,6 +993,12 @@ class TaskProcessViewController: UITableViewController {
             
             dest.delegate = self
             status = .BackToAdd
+        } else if segue.identifier == "addInvitationSegue" {
+            let dest = (segue.destination) as! InvitationViewController
+            dest.delegate = self
+            dest.currentInvitations = tmpInvitations
+            
+            status = .BackToAdd
         }
     }
     
@@ -986,5 +1030,14 @@ extension TaskProcessViewController: CustomNotificationDelegate {
         self.notificationCurrentSettingLabel.text = sentence
         self.tmpNotificationRange = range
         self.tmpNotificationNumber = number
+    }
+}
+
+
+
+extension TaskProcessViewController: SetInvitationDelegate {
+    func setInvitations(inv: [Invitation]) {
+        self.tmpInvitations = inv
+        print("Number of tmpInvitations: \(tmpInvitations.count)")
     }
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14903" systemVersion="18G87" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="InvitationDB" representedClassName="InvitationDB" syncable="YES">
+        <attribute name="contact" optional="YES" attributeType="String"/>
         <attribute name="lastEditTime" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="name" attributeType="String"/>
         <relationship name="task" maxCount="1" deletionRule="Nullify" destinationEntity="TaskDB" inverseName="invitations" inverseEntity="TaskDB"/>
@@ -37,7 +38,7 @@
         <relationship name="notification" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="NotificationDB" inverseName="task" inverseEntity="NotificationDB"/>
     </entity>
     <elements>
-        <element name="InvitationDB" positionX="-54" positionY="-9" width="128" height="88"/>
+        <element name="InvitationDB" positionX="-54" positionY="-9" width="128" height="103"/>
         <element name="LocationDB" positionX="-18" positionY="27" width="128" height="118"/>
         <element name="NotificationDB" positionX="-36" positionY="9" width="128" height="148"/>
         <element name="TaskDB" positionX="-63" positionY="-18" width="128" height="238"/>

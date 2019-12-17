@@ -4,7 +4,6 @@
 
 
 import UIKit
-import MessageUI
 
 protocol DeleteInvitationDelegate {
     func deleteInvitation(index: Int, inv: Invitation)
@@ -45,8 +44,13 @@ class InvitationTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "InvitationCell", for: indexPath) as! InvitationCell
 
         // Configure the cell...
-        cell.phoneNumberLabel.text = invitations[indexPath.row].phoneNumber
-        cell.messageAction = {phoneNumber in self.sendMessage(message: "Hello!", phoneNumber: phoneNumber)}
+        cell.nameLabel.text = invitations[indexPath.row].name
+        if let contact = invitations[indexPath.row].contact {
+            cell.contactLabel.text = contact
+        } else {
+            cell.contactLabel.isHidden = true
+        }
+        
         // cell.personImage.image = UIImage(named: "clock")
         
 
@@ -119,32 +123,7 @@ class InvitationTableViewController: UITableViewController {
     }
     */
     
-    
-    private func sendMessage(message: String, phoneNumber: String){
-        let messageVC = MFMessageComposeViewController()
-        messageVC.messageComposeDelegate = self
-        messageVC.recipients = [phoneNumber]
-        messageVC.body = message
-        
-        present(messageVC, animated: true, completion: nil)
-    }
+
 }
 
-extension InvitationTableViewController: MFMessageComposeViewControllerDelegate {
-    func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
-        switch (result) {
-        case .cancelled:
-            print("Message was cancelled")
-            dismiss(animated: true, completion: nil)
-        case .failed:
-            print("Message failed")
-            dismiss(animated: true, completion: nil)
-        case .sent:
-            print("Message was sent")
-            dismiss(animated: true, completion: nil)
-        default:
-            break
-        }
-    }
-    
-}
+

@@ -7,6 +7,8 @@
 //
 
 // MARK: - Bugs
+// 1. 若一个事件设置为无通知，点击编辑之后通知设置又会变为"提前30分钟通知"，比较好的方式应该是维持原来的通知设置
+
 // MARK: TODOs
 // 1. 为每个联系人设置一张图像(称呼的最后一个字、圆形)
 
@@ -127,13 +129,14 @@ class CalendarTableViewController: UITableViewController {
             ifFirstTime = false
             
             let todayView = generateOneView(event: today)
-            todayView.sequenceNumber = "0\(today.startDate.getAsFormat(format: "yyyyMMdd"))0000\(Date().getAsFormat(format: "yyyyMMddHHmmss"))"
+            todayView.sequenceNumber = "\(today.startDate.getAsFormat(format: "yyyyMMdd"))00000\(Date().getAsFormat(format: "yyyyMMddHHmmss"))"
             if !eventViews.keys.contains(index){
                 eventViews[index] = [todayView]
             } else {
                 eventViews[index]!.append(todayView)
             }
             
+            self.navigationItem.leftBarButtonItem?.title = Date().getAsFormat(format: "yyyy年M月")
         }
         
     }
@@ -163,6 +166,7 @@ class CalendarTableViewController: UITableViewController {
                     // print("Month the same")
                     
                     tableData.append(CellData(id: id, type: .Week, content: CalendarCellContent.weekDesc("\(monthOfStart)月\(firstDay.getAsFormat(format: "d"))日", "\(lastDay.getAsFormat(format: "d"))日", firstDay, lastDay)))
+                    endIndex += 1
                     
                     if !heights.keys.contains(id){
                         heights[id] = weekCellHeight
@@ -175,20 +179,22 @@ class CalendarTableViewController: UITableViewController {
                         if index == 12 { index = 1 }
                         
                         tableData.append(CellData(id: "\(id)-img", type: .MonthImage, content: CalendarCellContent.monthImage("\(index)月", Utils.monthImageMap[index]!)))
+                        endIndex += 1
                     }
                     
                 }else {
                     tableData.append(CellData(id: id, type: .Week, content: CalendarCellContent.weekDesc("\(monthOfStart)月\(firstDay.getAsFormat(format: "d"))日", "\(monthOfEnd)月\(lastDay.getAsFormat(format: "d"))日", firstDay, lastDay)))
-                    
+                    endIndex += 1
                     if !heights.keys.contains(id) {
                         heights[id] = weekCellHeight
                     }
                     
                     tableData.append(CellData(id: "\(id)-img", type: .MonthImage, content: CalendarCellContent.monthImage("\(monthOfEnd)月", Utils.monthImageMap[Int(monthOfEnd)!]!)))
+                    endIndex += 1
                 }
             }
             
-            endIndex += number
+            // endIndex += number
             tableView.reloadData()
             tableView.mj_footer.endRefreshing()
         }else {         // 下拉
@@ -210,6 +216,7 @@ class CalendarTableViewController: UITableViewController {
                 
                 if monthOfStart == monthOfEnd {
                     tableData.insert(CellData(id: id, type: .Week, content: CalendarCellContent.weekDesc("\(monthOfStart)月\(firstDay.getAsFormat(format: "d"))日", "\(lastDay.getAsFormat(format: "d"))日", firstDay, lastDay)), at: 0)
+                    startIndex -= 1
                     
                     if !heights.keys.contains(id) {
                         heights[id] = weekCellHeight
@@ -217,11 +224,13 @@ class CalendarTableViewController: UITableViewController {
                     
                     if firstDay.getAsFormat(format: "yyyyMMdd") == date.firstDayOfMonth().getAsFormat(format: "yyyyMMdd") {
                         tableData.insert(CellData(id: "\(id)-img", type: .MonthImage, content: CalendarCellContent.monthImage("\(monthOfStart)月", Utils.monthImageMap[Int(monthOfStart)!]!)), at: 0)
+                        startIndex -= 1
                     }
                     
                 } else {
                     tableData.insert(CellData(id: "\(id)-img", type: .MonthImage, content: CalendarCellContent.monthImage("\(monthOfEnd)月", Utils.monthImageMap[Int(monthOfEnd)!]!)), at: 0)
                     tableData.insert(CellData(id: id, type: .Week, content: CalendarCellContent.weekDesc("\(monthOfStart)月\(firstDay.getAsFormat(format: "d"))日", "\(monthOfEnd)月\(lastDay.getAsFormat(format: "d"))日", firstDay, lastDay)), at: 0)
+                    startIndex -= 2
                     
                     if !heights.keys.contains(id) {
                         heights[id] = weekCellHeight
@@ -229,7 +238,8 @@ class CalendarTableViewController: UITableViewController {
                 }
                 
             }
-            startIndex -= number
+            // startIndex -= number
+            
             tableView.reloadData()
             tableView.mj_header.endRefreshing()
         }
@@ -237,10 +247,12 @@ class CalendarTableViewController: UITableViewController {
     
     @objc private func downPullRefresh() {
         loadRefresh(number: pageSize, direction: false)
+        updateLeftBarButtonItemTitle()
     }
     
     @objc private func upPullRefresh() {
         loadRefresh(number: pageSize, direction: true)
+        updateLeftBarButtonItemTitle()
     }
     
     // MARK: - Date Handlers
@@ -274,9 +286,9 @@ class CalendarTableViewController: UITableViewController {
                     // 更新Views
                     let specialDayView = self.generateOneView(event: specialDay)
                     if ifHoliday {
-                        specialDayView.sequenceNumber = "1\(specialDay.startDate.getAsFormat(format: "yyyyMMdd"))0000\(Date().getAsFormat(format: "yyyyMMddHHmmss"))"
+                        specialDayView.sequenceNumber = "\(specialDay.startDate.getAsFormat(format: "yyyyMMdd"))00001\(Date().getAsFormat(format: "yyyyMMddHHmmss"))"
                     } else {
-                        specialDayView.sequenceNumber = "2\(specialDay.startDate.getAsFormat(format: "yyyyMMdd"))0000\(Date().getAsFormat(format: "yyyyMMddHHmmss"))"
+                        specialDayView.sequenceNumber = "\(specialDay.startDate.getAsFormat(format: "yyyyMMdd"))00002\(Date().getAsFormat(format: "yyyyMMddHHmmss"))"
                     }
                     if !self.eventViews.keys.contains(index){
                         self.eventViews[index] = [specialDayView]
@@ -302,27 +314,6 @@ class CalendarTableViewController: UITableViewController {
             for task in tasks {
                 generateTaskViews(task: task)
             }
-            /*
-            for task in tasks {
-                if task.timeLengthInDays == 0 {
-                    let index = task.startDate.firstDayOfWeek().getAsFormat(format: dateIndexFormat)
-                    if !heights.keys.contains(index) {
-                        heights[index] = weekCellHeight
-                    }
-                    heights[index]! += (eventViewHeight + 1)
-                } else {
-                    for i in 0...Int(task.timeLengthInDays) {
-                        let date = Date(timeInterval: Double(i*24*60*60), since: task.startDate)
-                        let index = date.firstDayOfWeek().getAsFormat(format: dateIndexFormat)
-                        if !heights.keys.contains(index) {
-                            heights[index] = weekCellHeight
-                        }
-                        heights[index]! += (eventViewHeight + 1)
-                    }
-                }
-                
-            }
-            */
             
         } catch  {
             print(error)
@@ -378,64 +369,6 @@ class CalendarTableViewController: UITableViewController {
             cell = miCell
         }
         
-        /*
-        var viewsToAdd: [EventView] = []
-        // 添加假期和调休日视图
-        for event in specialDays {
-            if event.startDate.firstDayOfWeek().getAsFormat(format: dateIndexFormat) == tableData[indexPath.row].id {
-                let eventView = generateOneView(event: event)
-                viewsToAdd.append(eventView)
-            }
-        }
-        
-        // 添加任务视图
-        for task in tasks {
-            
-            if task.timeLengthInDays == 0 {
-                if task.startDate.firstDayOfWeek().getAsFormat(format: dateIndexFormat) == tableData[indexPath.row].id {
-                    let taskViews = generateTaskViews(task: task)
-                    for taskView in taskViews {
-                        viewsToAdd.append(taskView)
-                    }
-                }
-            } else {
-                for i in 0...Int(task.timeLengthInDays) {
-                    let date = Date(timeInterval: Double(i * 24 * 60 * 60), since: task.startDate)
-                    if date.firstDayOfWeek().getAsFormat(format: dateIndexFormat) == tableData[indexPath.row].id {
-                        let taskViews = generateTaskViews(task: task)
-                        viewsToAdd.append(taskViews[i])
-                    }
-                }
-            }
-        }
-
-        // 排序后显示视图
-        viewsToAdd.sort(by: { (a,b) in
-            // event 不为nil表示节假日或者调休日
-            if a.event != nil && b.event != nil {
-                return a.sequenceNumber! < b.sequenceNumber!
-            }else if a.event == nil && b.event != nil{
-                return false
-            }else if a.event != nil && b.event == nil{
-                return true
-            }else {
-                return a.sequenceNumber! < b.sequenceNumber!
-            }
-        })
-        */
-        // viewsToAdd.sort(by: {$0.event!.startDate < $1.event!.startDate})
-        
-        /*
-        let evWidth = cell.bounds.width - 100
-        // let evX = cell.bounds.minX + 10
-        let evX: CGFloat = 0
-        for (index, view) in viewsToAdd.enumerated() {
-            var evY = cell.bounds.minY + weekCellHeight
-            evY += (CGFloat(index) * (eventViewHeight + 1))
-            view.frame = CGRect(x: evX, y: evY, width: evWidth, height: eventViewHeight)
-            cell.addSubview(view)
-        }
-        */
         
         let evWidth = cell.bounds.width - 100
         let evX = cell.bounds.minX + 10
@@ -536,7 +469,7 @@ class CalendarTableViewController: UITableViewController {
             taskView.processLabel.isHidden = true
             taskView.dateTimeLabel.text = "\(task.startTime!.getAsFormat(format: "HH:mm")) ~ \(task.endTime!.getAsFormat(format: "HH:mm"))"
             
-            taskView.sequenceNumber = "3\(task.startDate.getAsFormat(format: "yyyyMMdd"))\(task.startTime!.getAsFormat(format: "HHmm"))\(Date().getAsFormat(format: "yyyyMMddHHmmss"))"
+            taskView.sequenceNumber = "\(task.startDate.getAsFormat(format: "yyyyMMdd"))\(task.startTime!.getAsFormat(format: "HHmm"))3\(Date().getAsFormat(format: "yyyyMMddHHmmss"))"
             if !eventViews.keys.contains(index) {
                 eventViews[index] = [taskView]
             } else {
@@ -557,7 +490,7 @@ class CalendarTableViewController: UITableViewController {
             taskView.processLabel.isHidden = true
             taskView.dateTimeLabel.isHidden = true
 
-            taskView.sequenceNumber = "3\(task.startDate.getAsFormat(format: "yyyyMMdd"))0000\(Date().getAsFormat(format: "yyyyMMddHHmmss"))"
+            taskView.sequenceNumber = "\(task.startDate.getAsFormat(format: "yyyyMMdd"))00003\(Date().getAsFormat(format: "yyyyMMddHHmmss"))"
             if !eventViews.keys.contains(index) {
                 eventViews[index] = [taskView]
             } else {
@@ -591,16 +524,16 @@ class CalendarTableViewController: UITableViewController {
                     // 第一天
                     taskView.dateTimeLabel.isHidden = false
                     taskView.dateTimeLabel.text = "\(task.startTime!.getAsFormat(format: "HH:mm"))开始"
-                    taskView.sequenceNumber = "3\(date.getAsFormat(format: "yyyyMMdd"))\(task.startTime!.getAsFormat(format: "HHmm"))\(Date().getAsFormat(format: "yyyyMMddHHmmss"))"
+                    taskView.sequenceNumber = "\(date.getAsFormat(format: "yyyyMMdd"))\(task.startTime!.getAsFormat(format: "HHmm"))3\(Date().getAsFormat(format: "yyyyMMddHHmmss"))"
                 } else if i == Int(task.timeLengthInDays) {
                     // 最后一天
                     taskView.dateTimeLabel.isHidden = false
                     taskView.dateTimeLabel.text = "到\(task.endTime!.getAsFormat(format: "HH:mm"))"
-                    taskView.sequenceNumber = "3\(date.getAsFormat(format: "yyyyMMdd"))0000\(Date().getAsFormat(format: "yyyyMMddHHmmss"))"
+                    taskView.sequenceNumber = "\(date.getAsFormat(format: "yyyyMMdd"))00003\(Date().getAsFormat(format: "yyyyMMddHHmmss"))"
                 } else {
                     // 中间天
                     taskView.dateTimeLabel.isHidden = true
-                    taskView.sequenceNumber = "3\(date.getAsFormat(format: "yyyyMMdd"))0000\(Date().getAsFormat(format: "yyyyMMddHHmmss"))"
+                    taskView.sequenceNumber = "\(date.getAsFormat(format: "yyyyMMdd"))00003\(Date().getAsFormat(format: "yyyyMMddHHmmss"))"
                 }
                 
                 if !eventViews.keys.contains(index){
@@ -611,56 +544,6 @@ class CalendarTableViewController: UITableViewController {
             }
         }
         
-        /*
-        
-        if task.ifAllDay {
-            // 全天任务
-            let taskView = generateOneViewForTaskDB(task: task)
-            // let taskView = generateOneView(event: et)
-            taskView.processLabel.isHidden = true
-            taskView.dateTimeLabel.isHidden = true
-            views.append(taskView)
-        }else {
-            if task.timeLengthInDays == 0 {
-                // 起止时间在一天内的任务
-                let taskView = generateOneViewForTaskDB(task: task)
-                // let taskView = generateOneView(event: et)
-                taskView.processLabel.isHidden = true
-                taskView.dateTimeLabel.text = "\(task.startTime!.getAsFormat(format: "HH:mm")) ~ \(task.endTime!.getAsFormat(format: "HH:mm"))"
-                views.append(taskView)
-            } else {
-                // 跨越两天及两天以上的任务
-                for i in 0...Int(task.timeLengthInDays) {
-                    let taskView = generateOneViewForTaskDB(task: task)
-                    // let taskView = generateOneView(event: et)
-                    // print(task.startDate)
-                    // print(task.timeLengthInDays)
-                    let date = Date(timeInterval: Double(i * 24 * 60 * 60), since: task.startDate)
-                    taskView.dateIndex = date.getAsFormat(format: dateIndexFormat)
-                    taskView.dateNumberLabel.text = date.getAsFormat(format: "d")
-                    taskView.weekDayLabel.text = Utils.weekDayMap[Calendar.current.component(.weekday, from: date)]
-                    
-                    taskView.processLabel.isHidden = false
-                    taskView.processLabel.text = "第\(i + 1)天/共\(task.timeLengthInDays + 1)天"
-                    
-                    if i == 0 {         // 第一天
-                        taskView.dateTimeLabel.isHidden = false
-                        taskView.dateTimeLabel.text = "\(task.startTime!.getAsFormat(format: "HH:mm"))开始"
-                    }else if i == task.timeLengthInDays {   // 最后一天
-                        taskView.dateTimeLabel.isHidden = false
-                        taskView.dateTimeLabel.text = "到\(task.endTime!.getAsFormat(format: "HH:mm"))"
-                    } else {
-                        taskView.dateTimeLabel.isHidden = true
-                    }
-                    views.append(taskView)
-                }
-                
-            }
-            
-        }
-        */
-        
-        // return views
     }
     
     // 获取一个事件视图(仅节假日和调休日调用)
@@ -671,7 +554,7 @@ class CalendarTableViewController: UITableViewController {
         eView.dateIndex = event.startDate.getAsFormat(format: dateIndexFormat)
         eView.event = event
         // 序列号
-        eView.sequenceNumber = "\(event.startDate.getAsFormat(format: "yyyyMMdd"))0000"
+        // eView.sequenceNumber = "\(event.startDate.getAsFormat(format: "yyyyMMdd"))0000"
         
         // 标签自适应
         eView.processLabel.adjustsFontSizeToFitWidth = true
@@ -816,6 +699,30 @@ class CalendarTableViewController: UITableViewController {
     }
     
     
+    private func updateLeftBarButtonItemTitle() {
+        guard let indexes = tableView.indexPathsForVisibleRows else {
+            fatalError("No rows visible!")
+        }
+        if indexes.count > 0 {
+            // print("Indexes count: \(indexes.count)")
+            let indexPath = indexes[Int(indexes.count / 3)]
+            switch tableData[indexPath.row].type{
+            case .Week:
+                switch tableData[indexPath.row].content {
+                case .weekDesc(_, _, let start, _):
+                    // 设置bar button item 标题
+                    self.navigationItem.leftBarButtonItem?.title = start.getAsFormat(format: "yyyy年M月")
+                    // print(start.getAsFormat(format: "yyyy年M月"))
+                default:
+                    fatalError("Cell data invalid!")
+                }
+            default:
+                break
+            }
+        }
+    }
+    
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -832,27 +739,14 @@ class CalendarTableViewController: UITableViewController {
     
     // MARK: - Actions
     @IBAction func backToToday(_ sender: UIBarButtonItem) {
+        // print("Start index: \(startIndex)")
         tableView.scrollToRow(at: IndexPath(row: -startIndex + 3, section: 0), at: .middle, animated: true)
     }
     
     // 滑动tableView事件
     // https://stackoverflow.com/questions/32268856/how-to-know-that-tableview-started-scrolling
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let indexPath = tableView.indexPathsForVisibleRows![0]
-        switch tableData[indexPath.row].type{
-        case .Week:
-            switch tableData[indexPath.row].content {
-            case .weekDesc(_, _, let start, _):
-                // 设置bar button item 标题
-                self.navigationItem.leftBarButtonItem?.title = start.getAsFormat(format: "yyyy年M月")
-                // print(start.getAsFormat(format: "yyyy年M月"))
-            default:
-                fatalError("Cell data invalid!")
-            }
-        default:
-            break
-        }
-        
+        updateLeftBarButtonItemTitle()
     }
     
     // MARK: - Objc functions
@@ -897,119 +791,11 @@ extension CalendarTableViewController: TaskProcessDelegate {
         generateTaskViews(task: task)
         // showTasks()
         
-        
-        /*
-        if task.timeLengthInDays == 0 && !task.ifAllDay {
-            // 非全天事务且在1天内开始和完成
-            let index = task.startDate.firstDayOfWeek().getAsFormat(format: dateIndexFormat)
-            if !heights.keys.contains(index) {
-                heights[index] = weekCellHeight
-            }
-            heights[index]! += (eventViewHeight + 1)
-            
-            let taskView = generateOneViewForTaskDB(task: task)
-            taskView.sequenceNumber = "4\(task.startDate.getAsFormat(format: "yyyyMMdd"))\(task.startTime!.getAsFormat(format: "HHmm"))\(Date().getAsFormat(format: "yyyyMMddHHmmss"))"
-            if !eventViews.keys.contains(index) {
-                eventViews[index] = [taskView]
-            } else {
-                eventViews[index]!.append(taskView)
-            }
-            
-        } else if task.ifAllDay {
-            // 全天事务
-            let index = task.startDate.firstDayOfWeek().getAsFormat(format: dateIndexFormat)
-            if !heights.keys.contains(index) {
-                heights[index] = weekCellHeight
-            }
-            heights[index]! += (eventViewHeight + 1)
-            
-            let taskView = generateOneViewForTaskDB(task: task)
-            taskView.sequenceNumber = "3\(task.startDate.getAsFormat(format: "yyyyMMdd"))0000\(Date().getAsFormat(format: "yyyyMMddHHmmss"))"
-            if !eventViews.keys.contains(index) {
-                eventViews[index] = [taskView]
-            } else {
-                eventViews[index]!.append(taskView)
-            }
-            
-        } else {
-            // 跨越多天的事务
-            // 这里注意先将task.timeLengthInDays转成Int类型，因为若用Int16则i*24*60*60可能超过Int16的范围进而导致BAD_INSTRUCTION错
-            for i in 0...Int(task.timeLengthInDays) {
-                let date = Date(timeInterval: Double(i*24*60*60), since: task.startDate)
-                let index = date.firstDayOfWeek().getAsFormat(format: dateIndexFormat)
-                if !heights.keys.contains(index) {
-                    heights[index] = weekCellHeight
-                }
-                heights[index]! += (eventViewHeight + 1)
-                
-                let taskView = generateOneViewForTaskDB(task: task)
-                if i == 0 || i == Int(task.timeLengthInDays) {
-                    // 第一天或最后一天
-                    taskView.sequenceNumber = "4\(task.startDate.getAsFormat(format: "yyyyMMdd"))\(task.startTime!.getAsFormat(format: "HHmm"))\(Date().getAsFormat(format: "yyyyMMddHHmmss"))"
-                    
-                } else {
-                    // 中间天
-                    taskView.sequenceNumber = "3\(task.startDate.getAsFormat(format: "yyyyMMdd"))0000\(Date().getAsFormat(format: "yyyyMMddHHmmss"))"
-                }
-                
-                if !eventViews.keys.contains(index){
-                    eventViews[index] = [taskView]
-                } else {
-                    eventViews[index]!.append(taskView)
-                }
-            }
-            
-        }
-        */
-        
-        // 更新高度
-        /*
-        if task.timeLengthInDays == 0 {
-            let index = task.startDate.firstDayOfWeek().getAsFormat(format: dateIndexFormat)
-            if !heights.keys.contains(index) {
-                heights[index] = weekCellHeight
-            }
-            heights[index]! += (eventViewHeight + 1)
-        } else {
-            // for i in 0...task.timeLengthInDays {
-            // 这里注意先将task.timeLengthInDays转成Int类型，因为若用Int16则i*24*60*60可能超过Int16的范围进而导致BAD_INSTRUCTION错
-            for i in 0...Int(task.timeLengthInDays) {
-                let date = Date(timeInterval: Double(i*24*60*60), since: task.startDate)
-                let index = date.firstDayOfWeek().getAsFormat(format: dateIndexFormat)
-                if !heights.keys.contains(index) {
-                    heights[index] = weekCellHeight
-                }
-                heights[index]! += (eventViewHeight + 1)
-            }
-        }
-        
-        if task.timeLengthInDays == 0 && !task.ifAllDay {
-            
-            let taskView = generateOneViewForTaskDB(task: task)
-            taskView.sequenceNumber = "4\(task.startDate.getAsFormat(format: "yyyyMMdd"))\(task.startTime!.getAsFormat(format: "HHmm"))\(Date().getAsFormat(format: "yyyyMMddHHmmss"))"
-        } else if task.ifAllDay {
-            // 全天事务
-            let
-            
-        }
-        */
-        
         tableView.reloadData()
     }
     
     func deleteTask(task: TaskDB) {
-        /*
-        if task.timeLengthInDays == 0 {
-            let index = task.startDate.firstDayOfWeek().getAsFormat(format: dateIndexFormat)
-            heights[index]! -= (eventViewHeight + 1)
-        } else {
-            for i in 0...Int(task.timeLengthInDays) {
-                let date = Date(timeInterval: Double(i*24*60*60), since: task.startDate)
-                let index = date.firstDayOfWeek().getAsFormat(format: dateIndexFormat)
-                heights[index]! -= (eventViewHeight + 1)
-            }
-        }
-        */
+
         deleteTaskViews(task: task)
         
         let index = tasks.firstIndex(of: task)

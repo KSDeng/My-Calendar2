@@ -10,9 +10,8 @@ import Foundation
 
 class Invitation {
     var name: String
+    var contact: String?
     var lastEditTime: Date
-    var phoneNumber: String?
-    var task: Task?
     
     init(name: String, lastEditTime: Date) {
         self.name = name

@@ -13,20 +13,20 @@
 import UIKit
 
 // MARK: - Protocols
-protocol AddInvitationDelegate {
-    func addInvitation(inv: Invitation)
+
+protocol SetInvitationDelegate {
+    func setInvitations(inv: [Invitation])
 }
-protocol DeleteInvitationSecondDelegate {
-    func deleteInvitation(index: Int, inv: Invitation)
-}
+
 class InvitationViewController: UIViewController {
 
     // MARK: - Outlets
-    @IBOutlet weak var invitationPhoneNumberTextField: UITextField!
+    @IBOutlet weak var invitationNameTextField: UITextField!
+    
+    @IBOutlet weak var contactTextField: UITextField!
     
     // MARK: - Variables
-    var addDelegate: AddInvitationDelegate?
-    var deleteDelegate: DeleteInvitationSecondDelegate?
+    var delegate: SetInvitationDelegate?
     
     var currentInvitations: [Invitation] = []
     
@@ -36,28 +36,40 @@ class InvitationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        invitationPhoneNumberTextField.becomeFirstResponder()
-        invitationPhoneNumberTextField.clearButtonMode = .whileEditing
         // Do any additional setup after loading the view.
+        invitationNameTextField.becomeFirstResponder()
+        invitationNameTextField.clearButtonMode = .whileEditing
+        contactTextField.clearButtonMode = .whileEditing
     }
     
     // MARK: - Actions
     @IBAction func addButtonClicked(_ sender: UIButton) {
-        if let phone = invitationPhoneNumberTextField.text {
-            /*
-            let inv = Invitation(phoneNumber: phone, editTime: Date())
-            addDelegate?.addInvitation(inv: inv)
-            if let invitationTable = invitationTable {
-                invitationTable.addInvitation(invitation: inv)
-                invitationPhoneNumberTextField.text = ""
-            }
- */
+        guard let name = invitationNameTextField.text, name.trimmingCharacters(in: .whitespacesAndNewlines).count > 0 else {
+            let alert = UIAlertController(title: "请输入邀请对象称呼", message: "邀请对象称呼不能为空", preferredStyle: .actionSheet)
+            alert.addAction(UIAlertAction(title: "好", style: .default, handler: nil))
+            present(alert, animated: true, completion: nil)
+            return
+        }
+        let inv = Invitation(name: name, lastEditTime: Date())
+        if let contact = contactTextField.text {
+            inv.contact = contact
+        }
+        
+        // addDelegate?.addInvitation(inv: inv)
+        currentInvitations.append(inv)
+        invitationNameTextField.text = ""
+        contactTextField.text = ""
+        
+        if let invitationTable = invitationTable {
+            invitationTable.addInvitation(invitation: inv)
         }
         
     }
     
     
     @IBAction func saveButtonClicked(_ sender: UIBarButtonItem) {
+        delegate?.setInvitations(inv: currentInvitations)
+        
         navigationController?.popViewController(animated: true)
     }
     
@@ -71,15 +83,13 @@ class InvitationViewController: UIViewController {
             let dest = segue.destination as! InvitationTableViewController
             invitationTable = dest
             invitationTable?.delegate = self
-            for inv in currentInvitations {
-                invitationTable?.addInvitation(invitation: inv)
-            }
+            dest.invitations = currentInvitations
         }
     }
 }
 
 extension InvitationViewController: DeleteInvitationDelegate {
     func deleteInvitation(index: Int, inv: Invitation) {
-        deleteDelegate?.deleteInvitation(index: index, inv: inv)
+        currentInvitations.remove(at: index)
     }
 }

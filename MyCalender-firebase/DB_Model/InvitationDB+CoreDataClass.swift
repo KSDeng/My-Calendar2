@@ -12,5 +12,10 @@ import CoreData
 
 @objc(InvitationDB)
 public class InvitationDB: NSManagedObject {
-
+    convenience init(name: String, lastEditTime: Date, insertInto context: NSManagedObjectContext) {
+        let entity = NSEntityDescription.entity(forEntityName: "InvitationDB", in: context)
+        self.init(entity: entity!, insertInto: context)
+        self.name = name
+        self.lastEditTime = lastEditTime
+    }
 }

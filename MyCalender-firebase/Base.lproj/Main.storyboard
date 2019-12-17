@@ -16,45 +16,57 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SLZ-UU-zZg">
-                                <rect key="frame" x="0.0" y="182" width="414" height="680"/>
+                                <rect key="frame" x="0.0" y="202" width="414" height="660"/>
                                 <connections>
                                     <segue destination="CKD-xk-wwr" kind="embed" identifier="invitationTableViewSegue" id="bKb-EL-cu0"/>
                                 </connections>
                             </containerView>
-                            <stackView opaque="NO" contentMode="scaleToFill" spacing="26" translatesAutoresizingMaskIntoConstraints="NO" id="O2F-AD-c4G">
-                                <rect key="frame" x="16" y="114" width="382" height="34"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="14" translatesAutoresizingMaskIntoConstraints="NO" id="fUX-nC-4vT">
+                                <rect key="frame" x="20" y="106" width="215" height="82"/>
                                 <subviews>
-                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="输入邀请对象" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gRC-7e-pEd">
-                                        <rect key="frame" x="0.0" y="0.0" width="300" height="34"/>
+                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="称呼" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gRC-7e-pEd">
+                                        <rect key="frame" x="0.0" y="0.0" width="215" height="34"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="34" id="ejJ-1i-tIz"/>
-                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="261" id="emU-uY-5oe"/>
+                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="215" id="K31-Kk-U4r"/>
+                                            <constraint firstAttribute="height" constant="34" id="SMj-xd-6p1"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uqo-Km-67w">
-                                        <rect key="frame" x="326" y="0.0" width="56" height="34"/>
+                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="联系方式" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Hbx-4S-dVJ">
+                                        <rect key="frame" x="0.0" y="48" width="215" height="34"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="56" id="Rh6-UI-Shd"/>
+                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="215" id="5w4-pH-M8q"/>
+                                            <constraint firstAttribute="height" constant="34" id="zfh-DD-34q"/>
                                         </constraints>
-                                        <state key="normal" title="添加"/>
-                                        <connections>
-                                            <action selector="addButtonClicked:" destination="7NR-2c-vXD" eventType="touchUpInside" id="m91-Ff-bzd"/>
-                                        </connections>
-                                    </button>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
                                 </subviews>
                             </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uqo-Km-67w">
+                                <rect key="frame" x="323" y="130" width="60" height="34"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="34" id="0qU-Rz-uMu"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="60" id="5un-zh-KBQ"/>
+                                </constraints>
+                                <state key="normal" title="添加"/>
+                                <connections>
+                                    <action selector="addButtonClicked:" destination="7NR-2c-vXD" eventType="touchUpInside" id="m91-Ff-bzd"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="SLZ-UU-zZg" firstAttribute="top" secondItem="WCq-M7-avN" secondAttribute="top" constant="94" id="7z3-vi-Z37"/>
-                            <constraint firstItem="SLZ-UU-zZg" firstAttribute="leading" secondItem="WCq-M7-avN" secondAttribute="leading" id="CTV-4m-p2b"/>
-                            <constraint firstItem="SLZ-UU-zZg" firstAttribute="trailing" secondItem="WCq-M7-avN" secondAttribute="trailing" id="QuJ-uI-pnT"/>
-                            <constraint firstItem="O2F-AD-c4G" firstAttribute="top" secondItem="WCq-M7-avN" secondAttribute="top" constant="26" id="eEC-kc-Tvv"/>
-                            <constraint firstItem="O2F-AD-c4G" firstAttribute="leading" secondItem="WCq-M7-avN" secondAttribute="leading" constant="16" id="l5e-nY-bXH"/>
-                            <constraint firstItem="SLZ-UU-zZg" firstAttribute="bottom" secondItem="WCq-M7-avN" secondAttribute="bottom" id="o6r-aM-qVR"/>
-                            <constraint firstItem="WCq-M7-avN" firstAttribute="trailing" secondItem="O2F-AD-c4G" secondAttribute="trailing" constant="16" id="yx0-mU-Uc2"/>
+                            <constraint firstItem="SLZ-UU-zZg" firstAttribute="top" secondItem="fUX-nC-4vT" secondAttribute="bottom" constant="14" id="3Pj-EZ-ZUQ"/>
+                            <constraint firstItem="SLZ-UU-zZg" firstAttribute="leading" secondItem="WCq-M7-avN" secondAttribute="leading" id="C2D-Du-Rs5"/>
+                            <constraint firstItem="fUX-nC-4vT" firstAttribute="top" secondItem="WCq-M7-avN" secondAttribute="top" constant="18" id="DgN-t2-wyz"/>
+                            <constraint firstItem="fUX-nC-4vT" firstAttribute="leading" secondItem="Efg-7H-iOh" secondAttribute="leading" constant="20" id="Rcr-KD-EvQ"/>
+                            <constraint firstItem="SLZ-UU-zZg" firstAttribute="bottom" secondItem="WCq-M7-avN" secondAttribute="bottom" id="ULk-7q-qrg"/>
+                            <constraint firstItem="WCq-M7-avN" firstAttribute="trailing" secondItem="uqo-Km-67w" secondAttribute="trailing" constant="31" id="VmO-XS-MoQ"/>
+                            <constraint firstItem="uqo-Km-67w" firstAttribute="top" secondItem="WCq-M7-avN" secondAttribute="top" constant="42" id="W7n-FN-tlu"/>
+                            <constraint firstItem="SLZ-UU-zZg" firstAttribute="trailing" secondItem="WCq-M7-avN" secondAttribute="trailing" id="kWD-UB-8Vc"/>
+                            <constraint firstItem="uqo-Km-67w" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="fUX-nC-4vT" secondAttribute="trailing" constant="8" symbolic="YES" id="nFT-w2-M5U"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="WCq-M7-avN"/>
                     </view>
@@ -67,19 +79,20 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="invitationPhoneNumberTextField" destination="gRC-7e-pEd" id="wSY-Tp-Szn"/>
+                        <outlet property="contactTextField" destination="Hbx-4S-dVJ" id="RwX-dG-bay"/>
+                        <outlet property="invitationNameTextField" destination="gRC-7e-pEd" id="nzZ-Kw-qA4"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Sys-fQ-idH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4107" y="1423"/>
+            <point key="canvasLocation" x="4104.8000000000002" y="1421.7391304347827"/>
         </scene>
         <!--Invitation Table View Controller-->
         <scene sceneID="j9l-ym-Gc1">
             <objects>
                 <tableViewController id="CKD-xk-wwr" customClass="InvitationTableViewController" customModule="MyCalender_firebase" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="4SZ-SB-e0a">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="680"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="660"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="InvitationCell" rowHeight="44" id="QUM-or-uxN" customClass="InvitationCell" customModule="MyCalender_firebase" customModuleProvider="target">
@@ -92,41 +105,45 @@
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="U2U-Fc-nqD">
                                             <rect key="frame" x="20" y="6" width="30" height="30.5"/>
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="30" id="Ldv-2x-MI3"/>
+                                                <constraint firstAttribute="height" constant="30.5" id="CXI-Ld-ZQq"/>
+                                                <constraint firstAttribute="width" constant="30" id="KJi-be-ZN4"/>
                                             </constraints>
                                         </imageView>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R43-NH-oyU">
-                                            <rect key="frame" x="324" y="11" width="30" height="22"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="姓名" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wk2-iR-eWL">
+                                            <rect key="frame" x="64" y="11.5" width="108" height="21"/>
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="30" id="6ml-Qb-FbC"/>
-                                                <constraint firstAttribute="height" constant="22" id="K7V-5W-hej"/>
+                                                <constraint firstAttribute="height" constant="21" id="18S-21-qda"/>
+                                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="108" id="U1u-ei-Tke"/>
                                             </constraints>
-                                            <state key="normal" image="message" catalog="system"/>
-                                            <connections>
-                                                <action selector="messageButtonClicked:" destination="QUM-or-uxN" eventType="touchUpInside" id="VkJ-yo-EYI"/>
-                                            </connections>
-                                        </button>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="联系方式" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wk2-iR-eWL">
-                                            <rect key="frame" x="64" y="11.5" width="69.5" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="联系方式" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2yL-Nj-nGF">
+                                            <rect key="frame" x="199" y="11.5" width="156" height="21"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="156" id="BCo-dJ-gJ6"/>
+                                                <constraint firstAttribute="height" constant="21" id="PL5-T2-Sjt"/>
+                                            </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstAttribute="trailing" secondItem="R43-NH-oyU" secondAttribute="trailing" constant="20" id="1jj-p1-mie"/>
-                                        <constraint firstItem="wk2-iR-eWL" firstAttribute="leading" secondItem="U2U-Fc-nqD" secondAttribute="trailing" constant="14" id="6OC-1O-dAB"/>
-                                        <constraint firstItem="U2U-Fc-nqD" firstAttribute="top" secondItem="KQ5-q3-Byi" secondAttribute="top" constant="6" id="8mh-Q0-ne9"/>
-                                        <constraint firstItem="R43-NH-oyU" firstAttribute="centerY" secondItem="KQ5-q3-Byi" secondAttribute="centerY" id="Wpr-Dw-tu1"/>
-                                        <constraint firstItem="R43-NH-oyU" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="wk2-iR-eWL" secondAttribute="trailing" constant="8" symbolic="YES" id="dMA-h2-2hP"/>
-                                        <constraint firstItem="wk2-iR-eWL" firstAttribute="centerY" secondItem="KQ5-q3-Byi" secondAttribute="centerY" id="fw9-Gm-wOL"/>
-                                        <constraint firstItem="U2U-Fc-nqD" firstAttribute="leading" secondItem="KQ5-q3-Byi" secondAttribute="leading" constant="20" id="w17-tM-MbP"/>
-                                        <constraint firstAttribute="bottom" secondItem="U2U-Fc-nqD" secondAttribute="bottom" constant="7.5" id="zoA-jm-3V4"/>
+                                        <constraint firstItem="U2U-Fc-nqD" firstAttribute="top" secondItem="KQ5-q3-Byi" secondAttribute="top" constant="6" id="1Yn-uT-dJU"/>
+                                        <constraint firstItem="wk2-iR-eWL" firstAttribute="leading" secondItem="U2U-Fc-nqD" secondAttribute="trailing" constant="14" id="9oc-OK-W1G"/>
+                                        <constraint firstItem="2yL-Nj-nGF" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="wk2-iR-eWL" secondAttribute="trailing" constant="8" symbolic="YES" id="Cwc-ft-MTC"/>
+                                        <constraint firstItem="wk2-iR-eWL" firstAttribute="centerY" secondItem="KQ5-q3-Byi" secondAttribute="centerY" id="O78-zd-wtf"/>
+                                        <constraint firstAttribute="trailing" secondItem="2yL-Nj-nGF" secondAttribute="trailing" constant="19" id="TUr-cv-z9s"/>
+                                        <constraint firstItem="U2U-Fc-nqD" firstAttribute="leading" secondItem="KQ5-q3-Byi" secondAttribute="leading" constant="20" id="bIA-Ed-4b0"/>
+                                        <constraint firstItem="2yL-Nj-nGF" firstAttribute="centerY" secondItem="KQ5-q3-Byi" secondAttribute="centerY" id="x6J-dW-sfG"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="contactLabel" destination="2yL-Nj-nGF" id="mk7-o1-brm"/>
+                                    <outlet property="nameLabel" destination="wk2-iR-eWL" id="MKa-wd-eHQ"/>
                                     <outlet property="personImage" destination="U2U-Fc-nqD" id="Unc-ul-RyC"/>
-                                    <outlet property="phoneNumberLabel" destination="wk2-iR-eWL" id="iBi-qr-ZCE"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -138,7 +155,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mA1-MV-ZPn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4904" y="1423"/>
+            <point key="canvasLocation" x="5252" y="1422"/>
         </scene>
         <!--添加事务-->
         <scene sceneID="0pA-7S-ktC">
@@ -185,7 +202,7 @@
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="clock" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="qoI-uj-FOY">
                                                     <rect key="frame" x="16" y="8.5" width="35" height="29.5"/>
-                                                    <color key="tintColor" systemColor="systemPinkColor" red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="tintColor" systemColor="systemPinkColor" red="1" green="0.1764705882" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="30" id="KCu-IX-up4"/>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="35" id="sxv-1m-keK"/>
@@ -382,7 +399,7 @@
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="person.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="mtY-eP-wEo">
                                                     <rect key="frame" x="16" y="7.5" width="35" height="32.5"/>
-                                                    <color key="tintColor" systemColor="systemGreenColor" red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="tintColor" systemColor="systemGreenColor" red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="35" id="FUC-Hn-pS0"/>
                                                     </constraints>
@@ -408,7 +425,7 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="7NR-2c-vXD" kind="show" identifier="addInvitation" id="XgZ-H5-Una"/>
+                                            <segue destination="7NR-2c-vXD" kind="show" identifier="addInvitationSegue" id="XgZ-H5-Una"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -433,7 +450,7 @@
                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="Nt8-7L-7nP">
                                                     <rect key="frame" x="70" y="8" width="300" height="205"/>
                                                     <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="提前30分钟通知" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9mC-tk-SGD">
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="不通知" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9mC-tk-SGD">
                                                             <rect key="frame" x="0.0" y="0.0" width="300" height="30"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="300" id="Tk5-XC-9P4"/>
@@ -450,7 +467,7 @@
                                                                 <constraint firstAttribute="width" constant="300" id="R8n-y1-g3W"/>
                                                             </constraints>
                                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                            <state key="normal" title="无">
+                                                            <state key="normal" title="不通知">
                                                                 <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             </state>
                                                             <connections>
@@ -906,7 +923,6 @@
         <image name="clock" catalog="system" width="64" height="62"/>
         <image name="doc.text.fill" catalog="system" width="56" height="64"/>
         <image name="location.fill" catalog="system" width="64" height="60"/>
-        <image name="message" catalog="system" width="64" height="58"/>
         <image name="person.fill" catalog="system" width="64" height="60"/>
     </resources>
 </document>

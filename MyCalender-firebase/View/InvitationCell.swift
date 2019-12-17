@@ -8,9 +8,12 @@ class InvitationCell: UITableViewCell {
     
     @IBOutlet weak var personImage: UIImageView!
     
-    @IBOutlet weak var phoneNumberLabel: UILabel!
+    @IBOutlet weak var nameLabel: UILabel!
     
-    var messageAction : ((String) -> Void)? = nil
+    @IBOutlet weak var contactLabel: UILabel!
+    
+    
+    // var messageAction : ((String) -> Void)? = nil
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -23,7 +26,7 @@ class InvitationCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    
+    /*
     @IBAction func messageButtonClicked(_ sender: UIButton) {
         if let phoneNumber = phoneNumberLabel.text, let action = messageAction {
             action(phoneNumber)
@@ -31,7 +34,7 @@ class InvitationCell: UITableViewCell {
             print("Message not sent.")
         }
     }
-    
+    */
     
     
     

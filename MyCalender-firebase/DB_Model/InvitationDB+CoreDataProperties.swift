@@ -2,7 +2,7 @@
 //  InvitationDB+CoreDataProperties.swift
 //  MyCalender-firebase
 //
-//  Created by DKS_mac on 2019/12/16.
+//  Created by DKS_mac on 2019/12/17.
 //  Copyright © 2019 dks. All rights reserved.
 //
 //
@@ -19,6 +19,7 @@ extension InvitationDB {
 
     @NSManaged public var lastEditTime: Date
     @NSManaged public var name: String
+    @NSManaged public var contact: String?
     @NSManaged public var task: TaskDB?
 
 }

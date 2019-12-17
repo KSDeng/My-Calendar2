@@ -30,7 +30,7 @@ class EventView: UIView {
     var task: TaskDB?       // Task(持久化)使用
     var dateIndex: String?
     
-    // 序列号(用于排序), 类型 + 开始时间 + 加入列表的时间
+    // 序列号(用于排序), 开始时间 + 类型 + 加入列表的时间
     // 类型(0: 今天, 1: 节假日, 2: 调休日, 3: 各种事务，包括全天事务、非全天事务或跨越多天事务的每一天)
     // 开始时间： startDate(yyyyMMdd) + startTime(HHmm)，0、1、2、3类型的startTime设为0000，跨越多天事务的中间天和最后一天的startTime也设为0000
     // 加入列表的时间：Date()(yyyyMMddHHmmss)
