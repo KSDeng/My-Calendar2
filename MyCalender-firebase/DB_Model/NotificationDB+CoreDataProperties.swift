@@ -2,7 +2,7 @@
 //  NotificationDB+CoreDataProperties.swift
 //  MyCalender-firebase
 //
-//  Created by DKS_mac on 2019/12/15.
+//  Created by DKS_mac on 2019/12/16.
 //  Copyright © 2019 dks. All rights reserved.
 //
 //
@@ -17,12 +17,12 @@ extension NotificationDB {
         return NSFetchRequest<NotificationDB>(entityName: "NotificationDB")
     }
 
-    @NSManaged public var id: UUID?
-    @NSManaged public var datetime: Date?
-    @NSManaged public var title: String?
-    @NSManaged public var body: String?
-    @NSManaged public var rangeRawValue: String?
+    @NSManaged public var body: String
+    @NSManaged public var datetime: Date
+    @NSManaged public var id: UUID
     @NSManaged public var number: Int16
-    @NSManaged public var task: TaskDB?
+    @NSManaged public var rangeRawValue: String
+    @NSManaged public var title: String
+    @NSManaged public var task: TaskDB
 
 }

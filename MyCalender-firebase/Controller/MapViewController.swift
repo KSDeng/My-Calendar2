@@ -12,6 +12,7 @@ import CoreLocation
 
 // MARK: TODOs
 // 使用当前位置时产生比较友好的信息
+// 搜索并选择位置之后搜索栏文字清空
 
 protocol SetLocationHandle {
     func setLocation(location: MKPlacemark)
@@ -54,7 +55,7 @@ class MapViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         mapView.delegate = self
-        
+        print("Current state: \(state)")
         if state == .add {
             // 设置并请求当前位置
             locationManager.delegate = self

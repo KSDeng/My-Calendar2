@@ -10,13 +10,12 @@ import Foundation
 
 class Invitation {
     var name: String
-    var phoneNumber: String
     var lastEditTime: Date
+    var phoneNumber: String?
     var task: Task?
     
-    init(name: String, phoneNumber: String, lastEditTime: Date) {
+    init(name: String, lastEditTime: Date) {
         self.name = name
-        self.phoneNumber = phoneNumber
         self.lastEditTime = lastEditTime
     }
 }

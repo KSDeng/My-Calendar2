@@ -1,7 +1,6 @@
 
 // https://stackoverflow.com/questions/28894765/uibutton-action-in-table-view-cell
-// MARK: TODOs
-// 为每个联系人设置一张图像
+
 
 
 import UIKit

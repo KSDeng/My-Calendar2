@@ -24,7 +24,7 @@
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="26" translatesAutoresizingMaskIntoConstraints="NO" id="O2F-AD-c4G">
                                 <rect key="frame" x="16" y="114" width="382" height="34"/>
                                 <subviews>
-                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="联系人手机号" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gRC-7e-pEd">
+                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="输入邀请对象" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gRC-7e-pEd">
                                         <rect key="frame" x="0.0" y="0.0" width="300" height="34"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="34" id="ejJ-1i-tIz"/>
@@ -185,7 +185,7 @@
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="clock" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="qoI-uj-FOY">
                                                     <rect key="frame" x="16" y="8.5" width="35" height="29.5"/>
-                                                    <color key="tintColor" systemColor="systemPinkColor" red="1" green="0.1764705882" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="tintColor" systemColor="systemPinkColor" red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="30" id="KCu-IX-up4"/>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="35" id="sxv-1m-keK"/>
@@ -366,7 +366,7 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="aDl-LW-tST" kind="show" identifier="showMap" id="ypk-5S-KzH"/>
+                                            <segue destination="aDl-LW-tST" kind="show" identifier="showMapSegue" id="ypk-5S-KzH"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -382,7 +382,7 @@
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="person.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="mtY-eP-wEo">
                                                     <rect key="frame" x="16" y="7.5" width="35" height="32.5"/>
-                                                    <color key="tintColor" systemColor="systemGreenColor" red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="tintColor" systemColor="systemGreenColor" red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="35" id="FUC-Hn-pS0"/>
                                                     </constraints>
@@ -604,10 +604,10 @@
             </objects>
             <point key="canvasLocation" x="5927.536231884058" y="582.58928571428567"/>
         </scene>
-        <!--Customize Notification View Controller-->
+        <!--Customize Notification Controller-->
         <scene sceneID="cxs-CL-T5F">
             <objects>
-                <viewController id="BCw-dw-Yhm" customClass="CustomizeNotificationViewController" customModule="MyCalender_firebase" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BCw-dw-Yhm" customClass="CustomizeNotificationController" customModule="MyCalender_firebase" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="bxU-fM-3KO">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -646,7 +646,7 @@
                                     <constraint firstAttribute="width" constant="30" id="f4H-hj-Cs8"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="提前xx提醒" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wub-s5-wqE">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="提前xx通知" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wub-s5-wqE">
                                 <rect key="frame" x="91" y="95" width="133" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="eHR-9o-9Za"/>

@@ -17,7 +17,7 @@ enum NotiRangeStatus: Int {
 }
 
 protocol CustomNotificationDelegate {
-    func setNotificationPara(secondsFromNow: Int, sentence: String, range: String, number: Int)
+    func setNotificationPara(secondsFromNow: Int, sentence: String, range: CustomizedNotificationRange, number: Int)
 }
 
 class CustomizeNotificationController: UIViewController {
@@ -80,10 +80,17 @@ class CustomizeNotificationController: UIViewController {
     @IBAction func finishButtonClicked(_ sender: UIButton) {
         let number = numberPickerDataSource[numberPicker.selectedRow(inComponent: 0)]
         let seconds = units[currentStatus.rawValue] * number
-        let range = rangePickerDataSource[currentStatus.rawValue]
+        let range: CustomizedNotificationRange?
         
-        delegate?.setNotificationPara(secondsFromNow: seconds, sentence: currentSettingLabel.text!, range: range, number: number)
-        print("Set notification \(seconds) seconds from task start time. Range = \(range), number = \(number)")
+        switch currentStatus {
+        case .Minute: range = .Minute
+        case .Hour: range = .Hour
+        case .Day: range = .Day
+        case .Week: range = .Week
+        }
+        
+        delegate?.setNotificationPara(secondsFromNow: seconds, sentence: currentSettingLabel.text!, range: range!, number: number)
+        print("Set notification \(seconds) seconds from task start time. Range = \(range!.rawValue), number = \(number)")
         dismiss(animated: true, completion: nil)
     }
     
@@ -155,7 +162,7 @@ extension CustomizeNotificationController: UIPickerViewDataSource, UIPickerViewD
         
         let currentNumber = numberPickerDataSource[numberSelectedIndex]
         let currentRange = rangePickerDataSource[rangePicker.selectedRow(inComponent: 0)]
-        currentSettingLabel.text = "提前\(currentNumber)\(currentRange)提醒"
+        currentSettingLabel.text = "提前\(currentNumber)\(currentRange)通知"
     }
     
     

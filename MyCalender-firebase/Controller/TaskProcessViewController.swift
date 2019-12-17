@@ -7,9 +7,13 @@
 //
 
 import UIKit
+import MapKit
+import CoreData
 
 protocol TaskProcessDelegate {
-    func addTask(task: Task)
+    func addTask(task: TaskDB)
+    func deleteTask(task: TaskDB)
+    func editTask(task: TaskDB)
 }
 
 
@@ -50,6 +54,13 @@ class TaskProcessViewController: UITableViewController {
     @IBOutlet weak var notificationCustomButton: UIButton!
     
     
+    // MARK: - Constants
+    // 本地通知管理器
+    let notificationManager = LocalNotificationManager()
+    
+    // 日期索引格式
+    let dateIndexFormat = "yyyy-MM-dd"
+    
     // MARK: - Variables
     // 每个section的行数
     var numberOfRows = [1,3,1,1,1,1]
@@ -67,7 +78,7 @@ class TaskProcessViewController: UITableViewController {
     var status = ProcessStatus.Default
     
     // 当前展示的Task
-    var displayTask: Task?
+    var displayTask: TaskDB?
     
     // 当前设置的开始时间和结束时间(用于进行时间合理性检查)
     var cachedST: Date? {
@@ -95,6 +106,9 @@ class TaskProcessViewController: UITableViewController {
     // 时间设置是否合法
     var ifTimeSettingValid = true
     
+    // 添加地点时的缓存
+    var tmpLocation: MKPlacemark?
+    
     // 是否展示更多通知选项
     var ifShowCustomNotificationSettings = false {
         willSet {
@@ -106,6 +120,16 @@ class TaskProcessViewController: UITableViewController {
         }
     }
     
+    // 缓存当前通知
+    var tmpNotification: Notification?
+    // 时间单位和数量
+    var tmpNotificationRange: CustomizedNotificationRange?
+    var tmpNotificationNumber: Int?
+    // 状态
+    var notificationSettingStatus = NotificationSetting.HalfAnHour
+    // 自定义notification通知时间秒数记录
+    var customNotificationSecondsFromNow: Int?
+    
     // 处理任务的代理
     var delegate: TaskProcessDelegate?
     
@@ -115,14 +139,20 @@ class TaskProcessViewController: UITableViewController {
     // MARK: - View lifecycle
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        setupVisibleContent()
+        
+        setDateTimePickers()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setupVisibleContent()
+        // 拖动时即隐藏键盘
+        tableView.keyboardDismissMode = .onDrag
         
-        setDateTimePickers()
+        setupTextFields()
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -133,28 +163,15 @@ class TaskProcessViewController: UITableViewController {
     
     // MARK: - Setups
     private func setupVisibleContent() {
+        ifShowCustomNotificationSettings = false
+        
         switch status {
-        case .Add:
-            let defaultStart = Date().nearestHour()
-            let defaultEnd = Date.init(timeInterval: 60*60, since: Date()).nearestHour()
-            
-            let defaultStartWeekday = Utils.weekDayMap[Calendar.current.component(.weekday, from: defaultStart)]!
-            let defaultEndWeekday = Utils.weekDayMap[Calendar.current.component(.weekday, from: defaultEnd)]!
-            // 设置时间缓存
-            tmpStartDate = defaultStart
-            tmpStartTime = defaultStart
-            tmpEndDate = defaultEnd
-            tmpEndTime = defaultEnd
-            // 开启时间合法性检查
-            cachedST = defaultStart
-            cachedET = defaultEnd
-            
-            // 设置初始时间标签
-            startDateLabel.text = "\(defaultStart.getAsFormat(format: "yyyy年M月d日")) \(defaultStartWeekday)"
-            startTimeButton.setTitle(defaultStart.getAsFormat(format: "HH:mm"), for: .normal)
-            endDateLabel.text = "\(defaultEnd.getAsFormat(format: "yyyy年M月d日")) \(defaultEndWeekday)"
-            endTimeButton.setTitle(defaultEnd.getAsFormat(format: "HH:mm"), for: .normal)
-            
+        case .HeadToAdd:
+            setupAdd()
+        case .Show:
+            setupShow()
+        case .Edit:
+            setupEdit()
         default:
             print("Status default.")
         }
@@ -172,6 +189,142 @@ class TaskProcessViewController: UITableViewController {
         
     }
     
+    // 输入栏添加完成按钮
+    private func setupTextFields() {
+        let toolBar = UIToolbar(frame: CGRect(origin: .zero, size: .init(width: view.frame.width, height: 30)))
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let doneBtn = UIBarButtonItem(title: "完成", style: .done, target: self, action: #selector(inputDoneButtonAction))
+        
+        toolBar.setItems([flexSpace, doneBtn], animated: false)
+        toolBar.sizeToFit()
+        
+        self.titleTextField.inputAccessoryView = toolBar
+        self.noteTextField.inputAccessoryView = toolBar
+    }
+    
+    private func setupAdd() {
+        let defaultStart = Date().nearestHour()
+        let defaultEnd = Date.init(timeInterval: 60*60, since: Date()).nearestHour()
+        
+        let defaultStartWeekday = Utils.weekDayMap[Calendar.current.component(.weekday, from: defaultStart)]!
+        let defaultEndWeekday = Utils.weekDayMap[Calendar.current.component(.weekday, from: defaultEnd)]!
+        // 设置时间缓存
+        tmpStartDate = defaultStart
+        tmpStartTime = defaultStart
+        tmpEndDate = defaultEnd
+        tmpEndTime = defaultEnd
+        // 开启时间合法性检查
+        cachedST = defaultStart
+        cachedET = defaultEnd
+        
+        // 设置初始时间标签
+        startDateLabel.text = "\(defaultStart.getAsFormat(format: "yyyy年M月d日")) \(defaultStartWeekday)"
+        startTimeButton.setTitle(defaultStart.getAsFormat(format: "HH:mm"), for: .normal)
+        endDateLabel.text = "\(defaultEnd.getAsFormat(format: "yyyy年M月d日")) \(defaultEndWeekday)"
+        endTimeButton.setTitle(defaultEnd.getAsFormat(format: "HH:mm"), for: .normal)
+    }
+    
+    private func setupShow() {
+        guard let task = displayTask else {
+            fatalError("Display task not set!")
+        }
+        navigationItem.title = "事务详情"
+        
+        titleTextField.isUserInteractionEnabled = false
+        ifAllDaySwitch.isUserInteractionEnabled = false
+        startDateLabel.isUserInteractionEnabled = false
+        startTimeButton.isUserInteractionEnabled = false
+        endDateLabel.isUserInteractionEnabled = false
+        endTimeButton.isUserInteractionEnabled = false
+        invitationLabel.isUserInteractionEnabled = false
+        noteTextField.isUserInteractionEnabled = false
+        
+        // 主题
+        titleTextField.text = task.title
+        // 时间
+        setDateTimeLabels(startDate: task.startDate, startTime: task.startTime, endDate: task.endDate, endTime: task.endTime)
+        cachedST = getTimeCombined(date: task.startDate, time: task.startTime!)
+        cachedET = getTimeCombined(date: task.endDate, time: task.endTime!)
+        tmpStartDate = task.startDate
+        tmpStartTime = task.startTime!
+        tmpEndDate = task.endDate!
+        tmpEndTime = task.endTime!
+        
+        // 地点
+        if let loc = task.location {
+            locationLabel.text = loc.title
+            locationLabel.textColor = UIColor.black
+        } else {
+            locationLabel.text = "未添加地点"
+        }
+        
+        // 全天开关
+        ifAllDaySwitch.isOn = task.ifAllDay
+        if ifAllDaySwitch.isOn {
+            startTimeButton.isHidden = true
+            endTimeButton.isHidden = true
+        }
+        // 通知
+        if let noti = task.notification {
+            var range: String?
+            switch CustomizedNotificationRange(rawValue: noti.rangeRawValue)!  {
+            case .Minute: range = "分钟"
+            case .Hour: range = "小时"
+            case .Day: range = "天"
+            case .Week: range = "周"
+            }
+            notificationCurrentSettingLabel.text = "提前\(noti.number)\(range!)通知"
+        } else {
+            notificationCurrentSettingLabel.text = "未设置通知"
+        }
+        
+        // 备注
+        noteTextField.text = task.note
+        
+        // navigationItem 某一侧添加多个BarButtonItem
+        // https://stackoverflow.com/questions/30341263/how-to-add-multiple-uibarbuttonitems-on-right-side-of-navigation-bar
+        let deleteButton = UIBarButtonItem(title: "删除", style: .plain, target: self, action: #selector(deleteButtonClicked))
+        // 设置bar button item 字体颜色
+        // https://stackoverflow.com/questions/664930/uibarbuttonitem-with-color
+        deleteButton.tintColor = UIColor.red
+        let editButton = UIBarButtonItem(title: "编辑", style: .plain, target: self, action: #selector(editButtonClicked))
+        
+        navigationItem.rightBarButtonItems = [deleteButton, editButton]
+    }
+    
+    private func setupEdit() {
+        guard let task = displayTask else {
+            fatalError("Edit task nil!")
+        }
+        
+        tmpStartDate = task.startDate
+        tmpStartTime = task.startTime!
+        tmpEndDate = task.endDate!
+        tmpEndTime = task.endTime!
+        cachedST = getTimeCombined(date: tmpStartDate, time: tmpStartTime)
+        cachedET = getTimeCombined(date: tmpEndDate, time: tmpEndTime)
+        
+        // 标题
+        titleTextField.text = task.title
+        // 全天开关
+        ifAllDaySwitch.isOn = task.ifAllDay
+        startTimeButton.isHidden = ifAllDaySwitch.isOn
+        endTimeButton.isHidden = ifAllDaySwitch.isOn
+        
+        // 时间
+        setDateTimeLabels(startDate: task.startDate, startTime: task.startTime, endDate: task.endDate, endTime: task.endTime)
+        
+        // 地点
+        if let loc = task.location {
+            locationLabel.text = loc.title
+            locationLabel.textColor = UIColor.black
+        }
+        
+        // 备注
+        noteTextField.text = task.note
+        
+    }
+    
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -182,6 +335,23 @@ class TaskProcessViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return numberOfRows[section]
+    }
+    
+    
+    override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        // 若是展示事务内容则将cell设置为不可选择
+        // https://stackoverflow.com/questions/812426/uitableview-setting-some-cells-as-unselectable
+        if status == .Show {
+            // 此时地点和邀请栏可以交互
+            // https://stackoverflow.com/questions/2267993/uitableview-how-to-disable-selection-for-some-rows-but-not-others
+            return (indexPath.section == 2) ? indexPath : nil
+        }
+        
+        // 打开全天开关之后结束时间不可交互
+        if ifAllDaySwitch.isOn {
+            return (indexPath.section == 1 && indexPath.row == 2) ? nil : indexPath
+        }
+        return indexPath
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -249,6 +419,13 @@ class TaskProcessViewController: UITableViewController {
                 } else if ifShowEdPicker {
                     res = 214
                 }
+            }
+        }
+        
+        // 通知设置栏
+        if indexPath.section == 4 {
+            if ifShowCustomNotificationSettings {
+                res = 220
             }
         }
         
@@ -348,6 +525,11 @@ class TaskProcessViewController: UITableViewController {
             startTimeButton.isHidden = true
             endTimeButton.isHidden = true
             endDateLabel.isUserInteractionEnabled = false
+            
+            tmpStartTime = "\(Date().getAsFormat(format: "yyyyMMdd"))0000".toDate(format: "yyyyMMddHHmm")
+            tmpEndDate = Date()
+            tmpEndTime = "\(Date().getAsFormat(format: "yyyyMMdd"))2359".toDate(format: "yyyyMMddHHmm")
+            
         } else {
             startTimeButton.isHidden = false
             endTimeButton.isHidden = false
@@ -418,9 +600,15 @@ class TaskProcessViewController: UITableViewController {
             fatalError("Start date not set!")
         }
         let lengthInDays = ifAllDaySwitch.isOn ? 0 : numOfDaysBetween(start: stDate, end: tmpEndDate!)
-        let task = Task(startDate: stDate, ifAllDay: ifAllDaySwitch.isOn, timeLengthInDays: lengthInDays, title: title)
-        // let taskDB = TaskDB(startDate: stDate, ifAllDay: ifAllDaySwitch.isOn, timeLengthInDays: lengthInDays, title: title, insertInto: Utils.context)
         
+        // 创建NSManagedObject
+        let task = TaskDB(startDate: stDate, ifAllDay: ifAllDaySwitch.isOn, timeLengthInDays: lengthInDays, title: title, colorPoint: Int(Utils.currentColorPoint), insertInto: Utils.context)
+        Utils.currentColorPoint = (Utils.currentColorPoint + 1) % Utils.eventColorArray.count
+        
+        task.startTime = tmpStartTime
+        task.endDate = tmpEndDate
+        task.endTime = tmpEndTime
+        /*
         if !task.ifAllDay {
             guard let stTime = tmpStartTime, let edDate = tmpEndDate, let edTime = tmpEndTime else {
                 fatalError("Time setting incomplete!")
@@ -429,12 +617,26 @@ class TaskProcessViewController: UITableViewController {
             task.endDate = edDate
             task.endTime = edTime
         }
+        */
         
-        // 颜色
-        task.colorPoint = Utils.currentColorPoint
-        Utils.currentColorPoint = (Utils.currentColorPoint + 1) % Utils.eventColorArray.count
+        // 地点
+        if let loc = tmpLocation {
+            // 创建地点(同时持久化)
+            let location = LocationDB(title: loc.name!, latitude: loc.coordinate.latitude, longitude: loc.coordinate.longitude, insertInto: Utils.context)
+            location.detail = loc.title
+            location.task = task
+            task.location = location
+        }
         
-        
+        // 通知
+        if notificationSettingStatus != .None {
+            let noti = generateNotification()!
+            notificationManager.addNotification(notification: noti)
+            // 持久化
+            let notificationDB = NotificationDB(id: noti.id, datetime: noti.datetime, title: noti.title, body: noti.body, number: noti.number, range: noti.range, insertInto: Utils.context)
+            notificationDB.task = task
+            task.notification = notificationDB
+        }
         
         delegate?.addTask(task: task)
         
@@ -443,36 +645,185 @@ class TaskProcessViewController: UITableViewController {
     
     
     @IBAction func notificationNoneButtonClicked(_ sender: UIButton) {
-        
+        notificationSettingStatus = .None
+        ifShowCustomNotificationSettings = false
+        notificationCurrentSettingLabel.text = "无"
+        tableView.beginUpdates()
+        tableView.endUpdates()
     }
     
     @IBAction func notificationTenMinutesButtonClicked(_ sender: UIButton) {
-        
+        notificationSettingStatus = .TenMinutes
+        ifShowCustomNotificationSettings = false
+        notificationCurrentSettingLabel.text = "提前10分钟通知"
+        tableView.beginUpdates()
+        tableView.endUpdates()
     }
     
     
     @IBAction func notificationHalfAnHourButtonClicked(_ sender: UIButton) {
-        
+        notificationSettingStatus = .HalfAnHour
+        ifShowCustomNotificationSettings = false
+        notificationCurrentSettingLabel.text = "提前30分钟通知"
+        tableView.beginUpdates()
+        tableView.endUpdates()
     }
     
     @IBAction func notificationOneHourButtonClicked(_ sender: UIButton) {
-        
+        notificationSettingStatus = .AnHour
+        ifShowCustomNotificationSettings = false
+        notificationCurrentSettingLabel.text = "提前1小时通知"
+        tableView.beginUpdates()
+        tableView.endUpdates()
     }
     
     // MARK: - Objc functions
-    @objc func doneButtonAction(){
-        
+    @objc func inputDoneButtonAction(){
+        self.view.endEditing(true)
     }
     
     @objc func deleteButtonClicked(){
+        guard let task = displayTask else {
+            fatalError("Display task not set!")
+        }
         
+        if task.notification != nil {
+            notificationManager.deleteNotification(id: task.notification!.id)
+        }
+        
+        delegate?.deleteTask(task: task)
+        navigationController?.popViewController(animated: true)
     }
     @objc func editButtonClicked(){
 
+        navigationItem.title = "编辑事务"
+        titleTextField.isUserInteractionEnabled = true
+        ifAllDaySwitch.isUserInteractionEnabled = true
+        startDateLabel.isUserInteractionEnabled = true
+        startTimeButton.isUserInteractionEnabled = true
+        endDateLabel.isUserInteractionEnabled = true
+        endTimeButton.isUserInteractionEnabled = true
+        
+        locationLabel.isUserInteractionEnabled = true
+        invitationLabel.isUserInteractionEnabled = true
+        noteTextField.isUserInteractionEnabled = true
+        
+        status = .Edit
+        let editConfirmButton = UIBarButtonItem(title: "保存", style: .plain, target: self, action: #selector(confirmEditButtonClicked))
+        navigationItem.rightBarButtonItems = [editConfirmButton]
+        
+        // 设置这两个变量相当于开启时间检查
+        cachedST = getTimeCombined(date: tmpStartDate, time: tmpStartTime)
+        cachedET = getTimeCombined(date: tmpEndDate, time: tmpEndTime)
+        
+        guard let task = displayTask else {
+            fatalError("Display task nil!")
+        }
+        
+        if task.location == nil{
+            locationLabel.text = "添加地点"
+        }
     }
     
     @objc func confirmEditButtonClicked(){
-
+        // 检查时间合法性
+        if !ifTimeSettingValid {
+            let alert = UIAlertController(title: "时间设置错误", message: "开始时间不能晚于结束时间!", preferredStyle: .actionSheet)
+            alert.addAction(UIAlertAction(title: "好", style: .default, handler: nil))
+            present(alert, animated: true, completion: nil)
+            return
+        }
+        
+        guard let task = displayTask else {
+            fatalError("Edit task nil!")
+        }
+        
+        //let newDateIndex = tmpStartDate!.getAsFormat(format: dateIndexFormat)
+        //let ifDateChanged = task.startDate.getAsFormat(format: dateIndexFormat) != newDateIndex
+        //let nDays = ifAllDaySwitch.isOn ? 0 : numOfDaysBetween(start: tmpStartDate!, end: tmpEndDate!)
+        //let ifNumDaysChanged = Int(task.timeLengthInDays) != nDays
+        
+        //if ifDateChanged || ifNumDaysChanged {
+            // 起始日期改变或者天数改变
+            
+            // 主题
+            let title = titleTextField.text!.isEmpty ? "(无主题)" : titleTextField.text!
+            // 时间
+            guard let stDate = tmpStartDate else {
+                fatalError("Start date not set!")
+            }
+            let lengthInDays = ifAllDaySwitch.isOn ? 0 : numOfDaysBetween(start: stDate, end: tmpEndDate!)
+            
+            // 创建NSManagedObject
+            let newTask = TaskDB(startDate: stDate, ifAllDay: ifAllDaySwitch.isOn, timeLengthInDays: lengthInDays, title: title, colorPoint: Int(Utils.currentColorPoint), insertInto: Utils.context)
+            newTask.colorPoint = task.colorPoint
+            
+            delegate?.deleteTask(task: task)
+            
+            newTask.startTime = tmpStartTime
+            newTask.endDate = tmpEndDate
+            newTask.endTime = tmpEndTime
+            
+            // 地点
+            if let loc = tmpLocation {
+                // 创建地点(同时持久化)
+                let location = LocationDB(title: loc.name!, latitude: loc.coordinate.latitude, longitude: loc.coordinate.longitude, insertInto: Utils.context)
+                location.detail = loc.title
+                location.task = newTask
+                newTask.location = location
+            }
+            
+            // 通知
+            if notificationSettingStatus != .None {
+                let noti = generateNotification()!
+                notificationManager.addNotification(notification: noti)
+                // 持久化
+                let notificationDB = NotificationDB(id: noti.id, datetime: noti.datetime, title: noti.title, body: noti.body, number: noti.number, range: noti.range, insertInto: Utils.context)
+                notificationDB.task = newTask
+                newTask.notification = notificationDB
+            }
+            
+            delegate?.addTask(task: newTask)
+            
+            navigationController?.popViewController(animated: true)
+            
+        //}
+        /*
+        else{
+            // 起始日期和天数均未变
+            task.title = titleTextField.text ?? "(无主题)"
+            task.ifAllDay = ifAllDaySwitch.isOn
+            task.startDate = tmpStartDate!
+            task.startTime = tmpStartTime
+            task.endDate = tmpEndDate
+            task.endTime = tmpEndTime
+            
+            // 设置位置信息
+            if let loc = tmpLocation {
+                if task.location == nil {
+                    // 新增地点
+                    let location = LocationDB(title: loc.name!, latitude: loc.coordinate.latitude, longitude: loc.coordinate.longitude, insertInto: Utils.context)
+                    location.detail = loc.title
+                    location.task = task
+                    task.location = location
+                    
+                }else {
+                    // 修改地点
+                    task.location!.title = loc.name!
+                    task.location!.latitude = loc.coordinate.latitude
+                    task.location!.longitude = loc.coordinate.longitude
+                    task.location!.detail = loc.title
+                }
+            }
+            
+            // 备注
+            task.note = noteTextField.text ?? "(未添加备注)"
+            
+            delegate?.editTask(task: task)
+            
+            navigationController?.popViewController(animated: true)
+            
+        }*/
     }
     
     // MARK: - Private utils
@@ -497,13 +848,143 @@ class TaskProcessViewController: UITableViewController {
         return Calendar.current.dateComponents([.day], from: start, to: end).day!
     }
     
+    // 获取一个Notification
+    private func generateNotification() -> Notification? {
+        guard let stDate = tmpStartDate, let stTime = tmpStartTime else {
+            fatalError("Notification start time invalid!")
+        }
+        let startTime = getTimeCombined(date: stDate, time: stTime)
+        let id = UUID()
+        let title = titleTextField.text ?? "无主题"
+        var datetime = Date()
+        var body = ""
+        var range: CustomizedNotificationRange?
+        var number = 0
+        
+        switch notificationSettingStatus {
+        case .TenMinutes:
+            number = 10
+            range = .Minute
+            datetime = Date(timeInterval: -10*60, since: startTime)
+        case .HalfAnHour:
+            number = 30
+            range = .Minute
+            datetime = Date(timeInterval: -30*60, since: startTime)
+        case .AnHour:
+            number = 60
+            range = .Minute
+            datetime = Date(timeInterval: -60*60, since: startTime)
+        case .Custom:
+            guard let seconds = customNotificationSecondsFromNow else {
+                fatalError("Try to use custom notification but parameters incomplete!")
+            }
+            datetime = Date(timeInterval: Double(-seconds), since: startTime)
+        default:
+            fatalError("Current notification setting not handled.")
+        }
+        
+        body = "⏰\(startTime.getAsFormat(format: "HH:mm"))"
+        
+        var noti: Notification? = nil
+        if notificationSettingStatus != .Custom {
+            noti = Notification(id: id, datetime: datetime, title: title, body: body, number: number, range: range!)
+        }else {
+            guard let nr = tmpNotificationRange, let nn = tmpNotificationNumber else {
+                fatalError("Custom notification parameters incomplete!")
+            }
+            noti = Notification(id: id, datetime: datetime, title: title, body: body, number: nn, range: nr)
+        }
+        
+        return noti
+    }
+    
+    // 设置初始时间显示
+    private func setDateTimeLabels(startDate: Date, startTime: Date?, endDate: Date?, endTime: Date?) {
+        let weekday = Utils.weekDayMap[Calendar.current.component(.weekday, from: startDate)]!
+        startDateLabel.text = "\(startDate.getAsFormat(format: "yyyy年M月d日")) \(weekday)"
+        
+        if let stTime = startTime {
+
+            startTimeButton.setTitle(stTime.getAsFormat(format: "HH:mm"), for: .normal)
+            
+            if let edDate = endDate, let edTime = endTime {
+                let eWeekday = Utils.weekDayMap[Calendar.current.component(.weekday, from: edDate)]!
+                endDateLabel.text = "\(edDate.getAsFormat(format: "yyyy年M月d日")) \(eWeekday)"
+                endTimeButton.setTitle(edTime.getAsFormat(format: "HH:mm"), for: .normal)
+            }
+            
+        }else {
+            startTimeButton.isHidden = true
+            endTimeButton.isHidden = true
+        }
+    }
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
+        if segue.identifier == "customizeNotificationSegue" {
+            notificationSettingStatus = .Custom
+            let dest = (segue.destination) as! CustomizeNotificationController
+            dest.delegate = self
+            status = .BackToAdd
+        } else if segue.identifier == "showMapSegue" {
+            let dest = (segue.destination) as! MapViewController
+            
+            if status == .HeadToAdd {
+                dest.state = .add
+            } else if status == .Show {
+                dest.state = .show
+                guard let task = displayTask else {
+                    fatalError("Display task nil!")
+                }
+                dest.showTitle = task.location?.title
+                dest.showLongitude = task.location?.longitude
+                dest.showLatitude = task.location?.latitude
+            }else if status == .Edit {
+                dest.state = .edit
+                guard let task = displayTask else {
+                    fatalError("Display task nil!")
+                }
+                dest.showTitle = task.location?.title
+                dest.showLongitude = task.location?.longitude
+                dest.showLatitude = task.location?.latitude
+            }
+            
+            dest.delegate = self
+            status = .BackToAdd
+        }
     }
     
 
+}
+
+// MARK: - Extensions
+// 设置地点
+extension TaskProcessViewController: SetLocationHandle {
+    func setLocation(location: MKPlacemark) {
+        tmpLocation = location
+        self.locationLabel.text = location.name
+        self.locationLabel.textColor = UIColor.black
+    }
+    
+    func editLocationDone(location: MKPlacemark) {
+        tmpLocation = location
+        self.locationLabel.text = location.name
+        self.locationLabel.textColor = UIColor.black
+    }
+    
+}
+
+
+// 自定义通知时间
+extension TaskProcessViewController: CustomNotificationDelegate {
+    func setNotificationPara(secondsFromNow: Int, sentence: String, range: CustomizedNotificationRange, number: Int) {
+        self.customNotificationSecondsFromNow = secondsFromNow
+        self.notificationCurrentSettingLabel.text = sentence
+        self.tmpNotificationRange = range
+        self.tmpNotificationNumber = number
+    }
 }

@@ -13,14 +13,12 @@
 		0A7739A223A4BEC500F97488 /* EventView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A7739A123A4BEC500F97488 /* EventView.xib */; };
 		0A8F354D23A3C6B900962880 /* LocalNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8F354C23A3C6B900962880 /* LocalNotificationManager.swift */; };
 		0AA19E9923A650E2007257CC /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0AA19E9723A650E2007257CC /* DataModel.xcdatamodeld */; };
-		0AA19EB323A658DD007257CC /* TaskDB+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA19EAB23A658DD007257CC /* TaskDB+CoreDataClass.swift */; };
-		0AA19EB423A658DD007257CC /* TaskDB+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA19EAC23A658DD007257CC /* TaskDB+CoreDataProperties.swift */; };
 		0AA19EB523A658DD007257CC /* LocationDB+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA19EAD23A658DD007257CC /* LocationDB+CoreDataClass.swift */; };
 		0AA19EB623A658DD007257CC /* LocationDB+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA19EAE23A658DD007257CC /* LocationDB+CoreDataProperties.swift */; };
-		0AA19EB723A658DD007257CC /* NotificationDB+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA19EAF23A658DD007257CC /* NotificationDB+CoreDataClass.swift */; };
-		0AA19EB823A658DD007257CC /* NotificationDB+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA19EB023A658DD007257CC /* NotificationDB+CoreDataProperties.swift */; };
 		0AA19EB923A658DD007257CC /* InvitationDB+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA19EB123A658DD007257CC /* InvitationDB+CoreDataClass.swift */; };
 		0AA19EBA23A658DD007257CC /* InvitationDB+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA19EB223A658DD007257CC /* InvitationDB+CoreDataProperties.swift */; };
+		0AAFAAD623A7538F00C97B24 /* NotificationDB+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AAFAAD423A7538F00C97B24 /* NotificationDB+CoreDataClass.swift */; };
+		0AAFAAD723A7538F00C97B24 /* NotificationDB+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AAFAAD523A7538F00C97B24 /* NotificationDB+CoreDataProperties.swift */; };
 		0AB08CF723A3811200A91E27 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB08CF623A3811200A91E27 /* AppDelegate.swift */; };
 		0AB08CF923A3811200A91E27 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB08CF823A3811200A91E27 /* SceneDelegate.swift */; };
 		0AB08CFB23A3811200A91E27 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB08CFA23A3811200A91E27 /* ViewController.swift */; };
@@ -42,6 +40,8 @@
 		0AB08D4A23A3843200A91E27 /* Invitation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB08D4923A3843200A91E27 /* Invitation.swift */; };
 		0AB08D4C23A3843E00A91E27 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB08D4B23A3843E00A91E27 /* Location.swift */; };
 		0AB08D4F23A3846400A91E27 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB08D4E23A3846400A91E27 /* Utils.swift */; };
+		0ABFC48A23A730A200EFB095 /* TaskDB+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABFC48823A730A200EFB095 /* TaskDB+CoreDataClass.swift */; };
+		0ABFC48B23A730A200EFB095 /* TaskDB+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABFC48923A730A200EFB095 /* TaskDB+CoreDataProperties.swift */; };
 		0AD24D5023A490710016F132 /* CalendarTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD24D4F23A490710016F132 /* CalendarTableViewController.swift */; };
 		0AD24D5223A490850016F132 /* TaskProcessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD24D5123A490850016F132 /* TaskProcessViewController.swift */; };
 		24977A90248099EBE1103D46 /* Pods_MyCalender_firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E0F1ED99638B625CD09C7F7 /* Pods_MyCalender_firebase.framework */; };
@@ -69,14 +69,12 @@
 		0A7739A123A4BEC500F97488 /* EventView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EventView.xib; sourceTree = "<group>"; };
 		0A8F354C23A3C6B900962880 /* LocalNotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalNotificationManager.swift; sourceTree = "<group>"; };
 		0AA19E9823A650E2007257CC /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
-		0AA19EAB23A658DD007257CC /* TaskDB+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskDB+CoreDataClass.swift"; sourceTree = "<group>"; };
-		0AA19EAC23A658DD007257CC /* TaskDB+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskDB+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		0AA19EAD23A658DD007257CC /* LocationDB+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LocationDB+CoreDataClass.swift"; sourceTree = "<group>"; };
 		0AA19EAE23A658DD007257CC /* LocationDB+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LocationDB+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		0AA19EAF23A658DD007257CC /* NotificationDB+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationDB+CoreDataClass.swift"; sourceTree = "<group>"; };
-		0AA19EB023A658DD007257CC /* NotificationDB+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationDB+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		0AA19EB123A658DD007257CC /* InvitationDB+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InvitationDB+CoreDataClass.swift"; sourceTree = "<group>"; };
 		0AA19EB223A658DD007257CC /* InvitationDB+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InvitationDB+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0AAFAAD423A7538F00C97B24 /* NotificationDB+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationDB+CoreDataClass.swift"; sourceTree = "<group>"; };
+		0AAFAAD523A7538F00C97B24 /* NotificationDB+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationDB+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		0AB08CF323A3811200A91E27 /* MyCalender-firebase.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MyCalender-firebase.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AB08CF623A3811200A91E27 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0AB08CF823A3811200A91E27 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -104,6 +102,8 @@
 		0AB08D4923A3843200A91E27 /* Invitation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Invitation.swift; sourceTree = "<group>"; };
 		0AB08D4B23A3843E00A91E27 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		0AB08D4E23A3846400A91E27 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		0ABFC48823A730A200EFB095 /* TaskDB+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskDB+CoreDataClass.swift"; sourceTree = "<group>"; };
+		0ABFC48923A730A200EFB095 /* TaskDB+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskDB+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		0AD24D4F23A490710016F132 /* CalendarTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarTableViewController.swift; sourceTree = "<group>"; };
 		0AD24D5123A490850016F132 /* TaskProcessViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskProcessViewController.swift; sourceTree = "<group>"; };
 		10E202A29F98A406F641297A /* Pods-MyCalender-firebaseTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyCalender-firebaseTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MyCalender-firebaseTests/Pods-MyCalender-firebaseTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -148,12 +148,12 @@
 		0AA19E9A23A653B0007257CC /* DB_Model */ = {
 			isa = PBXGroup;
 			children = (
-				0AA19EAB23A658DD007257CC /* TaskDB+CoreDataClass.swift */,
-				0AA19EAC23A658DD007257CC /* TaskDB+CoreDataProperties.swift */,
+				0AAFAAD423A7538F00C97B24 /* NotificationDB+CoreDataClass.swift */,
+				0AAFAAD523A7538F00C97B24 /* NotificationDB+CoreDataProperties.swift */,
+				0ABFC48823A730A200EFB095 /* TaskDB+CoreDataClass.swift */,
+				0ABFC48923A730A200EFB095 /* TaskDB+CoreDataProperties.swift */,
 				0AA19EAD23A658DD007257CC /* LocationDB+CoreDataClass.swift */,
 				0AA19EAE23A658DD007257CC /* LocationDB+CoreDataProperties.swift */,
-				0AA19EAF23A658DD007257CC /* NotificationDB+CoreDataClass.swift */,
-				0AA19EB023A658DD007257CC /* NotificationDB+CoreDataProperties.swift */,
 				0AA19EB123A658DD007257CC /* InvitationDB+CoreDataClass.swift */,
 				0AA19EB223A658DD007257CC /* InvitationDB+CoreDataProperties.swift */,
 			);
@@ -508,26 +508,26 @@
 				0AB08D2D23A382AA00A91E27 /* MapViewController.swift in Sources */,
 				0AB08D3323A3831F00A91E27 /* InvitationViewController.swift in Sources */,
 				0AA19E9923A650E2007257CC /* DataModel.xcdatamodeld in Sources */,
-				0AA19EB323A658DD007257CC /* TaskDB+CoreDataClass.swift in Sources */,
 				0AD24D5223A490850016F132 /* TaskProcessViewController.swift in Sources */,
 				0AB08D3F23A383A400A91E27 /* MonthImageCell.swift in Sources */,
+				0ABFC48A23A730A200EFB095 /* TaskDB+CoreDataClass.swift in Sources */,
 				0AA19EB623A658DD007257CC /* LocationDB+CoreDataProperties.swift in Sources */,
 				0A8F354D23A3C6B900962880 /* LocalNotificationManager.swift in Sources */,
 				0AD24D5023A490710016F132 /* CalendarTableViewController.swift in Sources */,
 				0AB08CFB23A3811200A91E27 /* ViewController.swift in Sources */,
 				0AB08D4F23A3846400A91E27 /* Utils.swift in Sources */,
+				0AAFAAD723A7538F00C97B24 /* NotificationDB+CoreDataProperties.swift in Sources */,
 				0AA19EBA23A658DD007257CC /* InvitationDB+CoreDataProperties.swift in Sources */,
 				0AA19EB923A658DD007257CC /* InvitationDB+CoreDataClass.swift in Sources */,
+				0ABFC48B23A730A200EFB095 /* TaskDB+CoreDataProperties.swift in Sources */,
 				0AB08D4323A383DF00A91E27 /* InvitationCell.swift in Sources */,
 				0AA19EB523A658DD007257CC /* LocationDB+CoreDataClass.swift in Sources */,
 				0AB08D4123A383C200A91E27 /* EventView.swift in Sources */,
 				0AB08D3B23A3838400A91E27 /* PlainWeekCell.swift in Sources */,
 				0AB08D3523A3833B00A91E27 /* InvitationTableViewController.swift in Sources */,
-				0AA19EB823A658DD007257CC /* NotificationDB+CoreDataProperties.swift in Sources */,
 				0AB08D4823A3842600A91E27 /* Notification.swift in Sources */,
 				0AB08D4C23A3843E00A91E27 /* Location.swift in Sources */,
-				0AA19EB423A658DD007257CC /* TaskDB+CoreDataProperties.swift in Sources */,
-				0AA19EB723A658DD007257CC /* NotificationDB+CoreDataClass.swift in Sources */,
+				0AAFAAD623A7538F00C97B24 /* NotificationDB+CoreDataClass.swift in Sources */,
 				0A28FB2E23A3913D00265607 /* Event.swift in Sources */,
 				0AB08D3123A3830400A91E27 /* CustomizeNotificationViewController.swift in Sources */,
 				0AB08CF723A3811200A91E27 /* AppDelegate.swift in Sources */,
@@ -707,13 +707,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = QV95M68QZ7;
+				DEVELOPMENT_TEAM = 3HX8BYHH2U;
 				INFOPLIST_FILE = "MyCalender-firebase/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.dks.MyCalender-firebase";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ll.MyCalender-firebase";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -726,13 +726,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = QV95M68QZ7;
+				DEVELOPMENT_TEAM = 3HX8BYHH2U;
 				INFOPLIST_FILE = "MyCalender-firebase/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.dks.MyCalender-firebase";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ll.MyCalender-firebase";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

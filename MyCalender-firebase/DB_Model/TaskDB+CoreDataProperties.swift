@@ -2,7 +2,7 @@
 //  TaskDB+CoreDataProperties.swift
 //  MyCalender-firebase
 //
-//  Created by DKS_mac on 2019/12/15.
+//  Created by DKS_mac on 2019/12/16.
 //  Copyright © 2019 dks. All rights reserved.
 //
 //
@@ -17,36 +17,19 @@ extension TaskDB {
         return NSFetchRequest<TaskDB>(entityName: "TaskDB")
     }
 
-    @NSManaged public var startDate: Date?
-    @NSManaged public var startTime: Date?
+    @NSManaged public var colorPoint: Int16
     @NSManaged public var endDate: Date?
     @NSManaged public var endTime: Date?
-    @NSManaged public var typeRawValue: String?
     @NSManaged public var ifAllDay: Bool
-    @NSManaged public var timeLengthInDays: Int16
-    @NSManaged public var title: String?
-    @NSManaged public var colorPoint: Int16
     @NSManaged public var note: String?
-    @NSManaged public var location: LocationDB?
-    @NSManaged public var notifications: NSSet?
+    @NSManaged public var startDate: Date
+    @NSManaged public var startTime: Date?
+    @NSManaged public var timeLengthInDays: Int16
+    @NSManaged public var title: String
+    @NSManaged public var typeRawValue: String
     @NSManaged public var invitations: NSSet?
-
-}
-
-// MARK: Generated accessors for notifications
-extension TaskDB {
-
-    @objc(addNotificationsObject:)
-    @NSManaged public func addToNotifications(_ value: NotificationDB)
-
-    @objc(removeNotificationsObject:)
-    @NSManaged public func removeFromNotifications(_ value: NotificationDB)
-
-    @objc(addNotifications:)
-    @NSManaged public func addToNotifications(_ values: NSSet)
-
-    @objc(removeNotifications:)
-    @NSManaged public func removeFromNotifications(_ values: NSSet)
+    @NSManaged public var location: LocationDB?
+    @NSManaged public var notification: NotificationDB?
 
 }
 

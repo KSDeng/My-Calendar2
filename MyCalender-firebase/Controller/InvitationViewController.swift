@@ -9,10 +9,6 @@
 // https://stackoverflow.com/questions/20523874/uitableviewcontroller-inside-a-uiviewcontroller
 // https://stackoverflow.com/questions/34348275/pass-data-between-viewcontroller-and-containerviewcontroller
 
-// MARK: TODOs
-// 1. 从通讯录读取联系人信息
-// 2. 联系人包含称呼、联系方式
-// 3. 每个联系人添加一张图
 
 import UIKit
 

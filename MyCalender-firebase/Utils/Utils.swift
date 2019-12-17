@@ -65,7 +65,7 @@ enum EventType: String {
 }
 // 任务处理界面状态(增加、编辑、展示、默认)
 enum ProcessStatus: String {
-    case Add, Edit, Show, Default
+    case HeadToAdd, BackToAdd, Edit, Show, Default
 }
 
 // 日历表格的cell种类
@@ -81,13 +81,18 @@ enum CalendarCellContent {
 }
 
 // 自定义通知提前的时间单位
-enum CustomizedNotificationRange {
+enum CustomizedNotificationRange: String {
     case Minute, Hour, Day, Week
 }
 
 enum Month: Int {
     case January = 1, February, March, April, May, June,
     July, August, September, October, November, December
+}
+
+// 通知设置的种类
+enum NotificationSetting: String {
+    case None, TenMinutes, HalfAnHour, AnHour, Custom
 }
 
 // MARK: - Extensions
