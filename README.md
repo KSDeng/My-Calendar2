@@ -24,7 +24,7 @@ Thanks to [Prof. Chun Cao](https://ccao.cc/en/) for his guidance and help, and w
 
 # 我的日历
 
-这是我自己写的一个小工具，也是《移动互联技术》这门课的课程作业，可以作为平时事务的记事本用。最初的想法是模仿Google Calendar，那玩意儿真的很精致，我比它多的一个功能就是能通过地图来选地点。
+这是我自己写的一个小工具，也是《移动互联技术》这门课的课程作业，可以作为平时事务的记事本用。最初的想法是模仿Google Calendar，那玩意儿真的很精致。
 
 中间经过了几次重构，其中一次重建了整个项目，于是干脆把仓库也换了，之前的commit 在 [My-Calendar](https://github.com/KSDeng/My-Calendar)
 
