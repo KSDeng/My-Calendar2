@@ -47,15 +47,17 @@ Thanks to [Prof. Chun Cao](https://ccao.cc/en/) for his guidance and help, and w
 
 # 部分功能展示 Display of some features
 
-**Please download *README.pdf to see the effects.***
+**You can also download *README.pdf to see the effects.***
 
+![](https://github.com/KSDeng/My-Calendar2/blob/master/pic/initUI.JPG?raw=true)
 
+![](https://github.com/KSDeng/My-Calendar2/blob/master/pic/addTask.JPG?raw=true)
 
+![](https://github.com/KSDeng/My-Calendar2/blob/master/pic/map.JPG?raw=true)
 
+![](https://github.com/KSDeng/My-Calendar2/blob/master/pic/customizeNotification.JPG?raw=true)
 
-
-
-
+![](https://github.com/KSDeng/My-Calendar2/blob/master/pic/noti_present.JPG?raw=true)
 
 
 
