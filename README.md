@@ -47,19 +47,25 @@ Thanks to [Prof. Chun Cao](ccao.cc) for his guidance and help, and wish you a ha
 
 # 部分功能展示 Display of some features
 
-**See also in *pic* directory**
+**See also in *pic* directory and *README.pdf***
 
-![](https://github.com/KSDeng/My-Calendar2/blob/master/pic/multi-day-task.JPG?raw=true)
-
-
-
-![](https://github.com/KSDeng/My-Calendar2/blob/master/pic/addTask.JPG?raw=true)
-
-![](https://github.com/KSDeng/My-Calendar2/blob/master/pic/map.JPG?raw=true)
+![image-20191218141912058](/Users/dks/Library/Application Support/typora-user-images/image-20191218141912058.png)
 
 
 
-![](https://github.com/KSDeng/My-Calendar2/blob/master/pic/noti_present.JPG?raw=true)
+![image-20191218141952761](/Users/dks/Library/Application Support/typora-user-images/image-20191218141952761.png)
+
+
+
+![image-20191218142014095](/Users/dks/Library/Application Support/typora-user-images/image-20191218142014095.png)
+
+![image-20191218142024514](/Users/dks/Library/Application Support/typora-user-images/image-20191218142024514.png)
+
+![image-20191218142036692](/Users/dks/Library/Application Support/typora-user-images/image-20191218142036692.png)
+
+![image-20191218142044770](/Users/dks/Library/Application Support/typora-user-images/image-20191218142044770.png)
+
+
 
 
 
