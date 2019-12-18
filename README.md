@@ -2,13 +2,13 @@
 
 # My Calendar
 
-This is a small tool written in Swift 5, which is also the course assignment of Mobile Internet Technology. It can be used as a notepad for daily business. The original idea was to mimic Google Calendar, which I later found was really elaborate,  and one of the features I had more than Google Calendar was the ability to pick locations from a map.
+This is a small tool written in Swift 5, which is also the course assignment of Mobile Internet Technology. It can be used as a notepad for daily business. The original idea was to mimic Google Calendar, which I later found was really elaborate.
 
 There have been several refactorings during my implementation, one of which rebuilded the entire project, so I replaced the repository. Previous commits can be seen at [My-Calendar](https://github.com/KSDeng/My-Calendar)
 
 At first, I intended to use the Firebase backend, so I named the project MyCalendar-firebase. Later, however, I faced some problems involving local storage and cloud storage synchronization, and it was kind of complicated and the time was tight, so I had to give up. Therefore, the current implementation has nothing to do with Firebase, just ignore the project name!. I'll have a try to use CloudKit in the future, after all, it's not blocked in China. (
 
-Thanks to [Prof. Chun Cao](ccao.cc) for his guidance and help, and wish you a happy new year ☺ (2020).
+Thanks to [Prof. Chun Cao](https://ccao.cc/en/) for his guidance and help, and wish you a happy new year ☺ (2020).
 
 ## Features
 
@@ -30,7 +30,7 @@ Thanks to [Prof. Chun Cao](ccao.cc) for his guidance and help, and wish you a ha
 
 一开始打算用上firebase后端，因此项目命名为MyCalendar-firebase，后来发现涉及到本地存储和云存储同步的问题，比较复杂，加上时间紧迫，只好作罢。因此现在的实现跟firebase没半毛钱关系，以后有机会试试CloudKit吧，毕竟那个没被墙 (
 
-感谢[曹春](ccao.cc)老师的指导和帮助，给大家拜个早年 ☺。
+感谢[曹春](https://ccao.cc/en/)老师的指导和帮助，给大家拜个早年 ☺。
 
 ##  功能
 
