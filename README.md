@@ -47,6 +47,8 @@ Thanks to [Prof. Chun Cao](ccao.cc) for his guidance and help, and wish you a ha
 
 # 部分功能展示 Display of some features
 
+**See also in *pic* directory**
+
 ![](https://github.com/KSDeng/My-Calendar2/blob/master/pic/multi-day-task.JPG?raw=true)
 
 
